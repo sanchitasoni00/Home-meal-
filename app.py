@@ -441,7 +441,7 @@ def home_page():
 # STUDENT DASHBOARD
 # =========================================================
 
-def student_dashboard():
+def User_dashboard():
 
     st.title("👨‍🎓 User Dashboard")
 
