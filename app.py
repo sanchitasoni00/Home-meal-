@@ -33,16 +33,16 @@ def home_page():
      
   st.title("🍱 Ghar Ka Khana, Ghar Se Khamai")
 
-st.subheader(
+  st.subheader(
     "Fresh, Affordable & Home-Cooked Meals for Students and Other Users"
 )
 
-st.write(
+  st.write(
     "HomeMeal connects students and Other Users with trusted local home cooks "
     "and helps them discover affordable meals based on "
     "their preferences."
 )
-    st.divider()
+  st.divider()
 
     # -----------------------------
     # ANIMATIONS CSS
