@@ -45,80 +45,90 @@ def home_page():
     # -----------------------------
     # ANIMATIONS CSS
     # -----------------------------
+ st.markdown("""
+    <style>
 
-   
-st.markdown("""
-<style>
-.feature-card {
-    background: linear-gradient(135deg, #f0fff4, #ffffff);
-    padding: 25px;
-    border-radius: 20px;
-    text-align: center;
-    border: 2px solid #d8f3dc;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-}
-
-.icon {
-    font-size: 45px;
-    animation: float 2s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0px);
+    .feature-card {
+        background: linear-gradient(135deg, #f0fff4, #ffffff);
+        padding: 25px;
+        border-radius: 20px;
+        text-align: center;
+        border: 2px solid #d8f3dc;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
     }
-    50% {
-        transform: translateY(-8px);
+
+    .feature-card:hover {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
     }
-    100% {
-        transform: translateY(0px);
+
+    .icon {
+        font-size: 45px;
+        animation: float 2s ease-in-out infinite;
     }
-}
 
-.feature-card h3 {
-    color: #166534;
-    margin-bottom: 8px;
-}
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
 
-.feature-card p {
-    color: #555;
-}
-</style>
-""", unsafe_allow_html=True)
-col1, col2, col3 = st.columns(3)
+        50% {
+            transform: translateY(-8px);
+        }
 
-with col1:
-    st.markdown("""
-    <div class="feature-card">
-        <div class="icon">💰</div>
-        <h3>Affordable</h3>
-        <p>Find meals that fit your budget.</p>
-    </div>
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    .feature-card h3 {
+        color: #166534;
+        margin-bottom: 8px;
+    }
+
+    .feature-card p {
+        color: #555;
+    }
+
+    </style>
     """, unsafe_allow_html=True)
 
-with col2:
-    st.markdown("""
-    <div class="feature-card">
-        <div class="icon">🏠</div>
-        <h3>Home-Cooked</h3>
-        <p>Fresh meals prepared by local home cooks.</p>
-    </div>
-    """, unsafe_allow_html=True)
 
-with col3:
-    st.markdown("""
-    <div class="feature-card">
-        <div class="icon">❤️</div>
-        <h3>Trusted</h3>
-        <p>Connect with reliable local cooks.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    # -----------------------------
+    # FEATURE CARDS
+    # -----------------------------
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown("""
+        <div class="feature-card">
+            <div class="icon">💰</div>
+            <h3>Affordable</h3>
+            <p>Find meals that fit your budget.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div class="feature-card">
+            <div class="icon">🏠</div>
+            <h3>Home-Cooked</h3>
+            <p>Fresh meals prepared by local home cooks.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("""
+        <div class="feature-card">
+            <div class="icon">❤️</div>
+            <h3>Trusted</h3>
+            <p>Connect with reliable local cooks.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+
 
     st.divider()
 
