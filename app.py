@@ -10,7 +10,7 @@ st.set_page_config(
 # HOME PAGE
 # -----------------------------
 
-st.title("🍱 HomeMeal")
+st.title("🍱 Ghar Ka Khana , Ghar Se Khamai")
 
 st.subheader(
     "Fresh, Affordable & Home-Cooked Meals for Students"
