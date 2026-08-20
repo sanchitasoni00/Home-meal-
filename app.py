@@ -31,12 +31,12 @@ def home_page():
     st.title("🍱 Ghar Ka Khana, Ghar Se Khamai")
 
     st.subheader(
-        "Fresh, Affordable & Home-Cooked Meals for Students"
+        "Fresh, Affordable & Home-Cooked Meals for Students and Other Users"
     )
 
     st.write(
-        "HomeMeal connects students with trusted local home cooks "
-        "and helps students discover affordable meals based on "
+        "HomeMeal connects students and Other Users with trusted local home cooks "
+        "and helps them discover affordable meals based on "
         "their preferences."
     )
 
@@ -47,10 +47,58 @@ def home_page():
     # -----------------------------
 
     col1, col2, col3 = st.columns(3)
+st.markdown("""
+<style>
+.feature-card {
+    background: linear-gradient(135deg, #f0fff4, #ffffff);
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    border: 2px solid #d8f3dc;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
 
+.feature-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.icon {
+    font-size: 45px;
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.feature-card h3 {
+    color: #166534;
+    margin-bottom: 8px;
+}
+
+.feature-card p {
+    color: #555;
+}
+</style>
+""", unsafe_allow_html=True)
     with col1:
-        st.markdown("### 💰 Affordable")
-        st.write("Find meals that fit your budget.")
+    st.markdown("""
+    <div class="feature-card">
+        <div class="icon">💰</div>
+        <h3>Affordable</h3>
+        <p>Find meals that fit your budget.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     with col2:
         st.markdown("### 🏠 Home-Cooked")
