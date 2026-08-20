@@ -2,10 +2,13 @@ import json
 from pathlib import Path
 import streamlit as st
 
+# Member 4 order functions
+from logic.order_logic import create_order, confirm_subscription
+
 
 # -------------------------------------------------
-# HOME MEAL - MEMBER 2
-# Student-side application
+# HOME MEAL - MEMBER 2 + MEMBER 4
+# Student Application + Order System
 # -------------------------------------------------
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -51,6 +54,9 @@ if "plan" not in st.session_state:
 if "order_confirmed" not in st.session_state:
     st.session_state.order_confirmed = False
 
+if "student_name" not in st.session_state:
+    st.session_state.student_name = ""
+
 
 # -------------------------------------------------
 # HEADER
@@ -69,7 +75,23 @@ st.divider()
 
 
 # -------------------------------------------------
-# 1. LOCATION
+# STUDENT DETAILS
+# -------------------------------------------------
+
+st.header("👨‍🎓 Student Details")
+
+student_name = st.text_input(
+    "Enter your name",
+    value=st.session_state.student_name
+)
+
+st.session_state.student_name = student_name
+
+st.divider()
+
+
+# -------------------------------------------------
+# LOCATION
 # -------------------------------------------------
 
 st.header("📍 1. Choose Your Location")
@@ -86,11 +108,9 @@ location = st.selectbox(
     locations
 )
 
-st.success("Location selected: " + location)
-
 
 # -------------------------------------------------
-# 2. FILTERS
+# FILTERS
 # -------------------------------------------------
 
 st.header("🔎 2. Find Your Meal")
@@ -98,6 +118,7 @@ st.header("🔎 2. Find Your Meal")
 col1, col2 = st.columns(2)
 
 with col1:
+
     max_price = st.number_input(
         "Maximum price (₹)",
         min_value=0,
@@ -119,6 +140,7 @@ with col1:
     )
 
 with col2:
+
     meal_type = st.selectbox(
         "Meal type",
         [
@@ -174,7 +196,7 @@ st.divider()
 
 
 # -------------------------------------------------
-# 3. NEARBY COOKS
+# NEARBY COOKS
 # -------------------------------------------------
 
 st.header("🏠 3. Nearby Home Cooks")
@@ -183,7 +205,7 @@ if not filtered_cooks:
 
     st.warning(
         "No cooks match your current filters. "
-        "Try increasing your maximum price or changing your preferences."
+        "Try changing your preferences."
     )
 
 else:
@@ -193,7 +215,11 @@ else:
         col1, col2, col3 = st.columns([3, 2, 1])
 
         with col1:
-            st.subheader("👩‍🍳 " + cook.get("name", "Home Cook"))
+
+            st.subheader(
+                "👩‍🍳 " +
+                cook.get("name", "Home Cook")
+            )
 
             st.write(
                 cook.get(
@@ -203,8 +229,17 @@ else:
             )
 
         with col2:
-            st.write("💰 Price: ₹" + str(cook.get("price", 0)))
-            st.write("⭐ Rating: " + str(cook.get("rating", 0)))
+
+            st.write(
+                "💰 Price: ₹"
+                + str(cook.get("price", 0))
+            )
+
+            st.write(
+                "⭐ Rating: "
+                + str(cook.get("rating", 0))
+            )
+
             st.write(
                 "📍 Distance: "
                 + str(cook.get("distance_km", 0))
@@ -219,14 +254,14 @@ else:
             ):
 
                 st.session_state.selected_cook = cook
-
                 st.session_state.order_confirmed = False
+
 
         st.divider()
 
 
 # -------------------------------------------------
-# 4. MENU
+# MENU
 # -------------------------------------------------
 
 if st.session_state.selected_cook:
@@ -236,27 +271,38 @@ if st.session_state.selected_cook:
     st.header("🍛 4. Today's Menu")
 
     st.subheader(
-        "Menu from " + cook.get("name", "Home Cook")
+        "Menu from "
+        + cook.get("name", "Home Cook")
     )
 
     st.write(
         "Food preference: "
-        + cook.get("food_preference", "Not specified")
+        + cook.get(
+            "food_preference",
+            "Not specified"
+        )
     )
 
     st.write(
         "Spice level: "
-        + cook.get("spice_level", "Not specified")
+        + cook.get(
+            "spice_level",
+            "Not specified"
+        )
     )
 
     st.write(
         "Available meals: "
-        + ", ".join(cook.get("meals", []))
+        + ", ".join(
+            cook.get("meals", [])
+        )
     )
+
+    price_per_meal = cook.get("price", 0)
 
     st.write(
         "Price per meal: ₹"
-        + str(cook.get("price", 0))
+        + str(price_per_meal)
     )
 
     st.info(
@@ -270,7 +316,7 @@ if st.session_state.selected_cook:
 
 
     # -------------------------------------------------
-    # 5. MEAL PLAN
+    # MEAL PLAN
     # -------------------------------------------------
 
     st.header("📅 5. Choose Your Meal Plan")
@@ -294,11 +340,12 @@ if st.session_state.selected_cook:
         meals_count = 30
 
 
-    price_per_meal = cook.get("price", 0)
-
     total_price = price_per_meal * meals_count
 
-    st.write("Number of meals:", meals_count)
+    st.write(
+        "Number of meals: "
+        + str(meals_count)
+    )
 
     st.metric(
         "Total Price",
@@ -307,18 +354,43 @@ if st.session_state.selected_cook:
 
 
     # -------------------------------------------------
-    # 6. SUBSCRIPTION CONFIRMATION
+    # CONFIRM ORDER
     # -------------------------------------------------
 
     st.header("✅ 6. Confirm Subscription")
 
-    st.write("**Cook:**", cook.get("name", "Home Cook"))
+    st.write(
+        "**Student:** "
+        + (
+            student_name
+            if student_name
+            else "Please enter your name"
+        )
+    )
 
-    st.write("**Plan:**", plan)
+    st.write(
+        "**Cook:** "
+        + cook.get("name", "Home Cook")
+    )
 
-    st.write("**Meals:**", meals_count)
+    st.write(
+        "**Plan:** "
+        + plan
+    )
 
-    st.write("**Total:** ₹" + str(total_price))
+    st.write(
+        "**Meal Type:** "
+        + (
+            meal_type
+            if meal_type != "All"
+            else "Dinner"
+        )
+    )
+
+    st.write(
+        "**Total:** ₹"
+        + str(total_price)
+    )
 
 
     if st.button(
@@ -326,23 +398,83 @@ if st.session_state.selected_cook:
         type="primary"
     ):
 
-        st.session_state.plan = {
-            "cook": cook.get("name", "Home Cook"),
-            "cook_id": cook.get("id"),
-            "plan": plan,
-            "meals": meals_count,
-            "total": total_price
-        }
+        if not student_name.strip():
 
-        st.session_state.order_confirmed = True
+            st.error(
+                "Please enter your name before "
+                "confirming the subscription."
+            )
 
-        st.success(
-            "🎉 Subscription confirmed successfully!"
-        )
+        else:
+
+            # Create actual order
+            order = create_order(
+                student_name=student_name,
+                cook_id=cook.get("id"),
+                cook_name=cook.get(
+                    "name",
+                    "Home Cook"
+                ),
+                plan=plan,
+                meal_type=(
+                    meal_type
+                    if meal_type != "All"
+                    else "Dinner"
+                ),
+                total=total_price
+            )
+
+            # Confirm subscription
+            confirmed_order = confirm_subscription(
+                order["order_id"]
+            )
+
+            if confirmed_order:
+
+                st.session_state.plan = {
+                    "order_id":
+                        confirmed_order["order_id"],
+
+                    "cook":
+                        cook.get(
+                            "name",
+                            "Home Cook"
+                        ),
+
+                    "plan":
+                        plan,
+
+                    "meals":
+                        meals_count,
+
+                    "total":
+                        total_price,
+
+                    "status":
+                        confirmed_order["status"]
+                }
+
+                st.session_state.order_confirmed = True
+
+                st.success(
+                    "🎉 Subscription confirmed!"
+                )
+
+                st.info(
+                    "Order ID: "
+                    + confirmed_order["order_id"]
+                )
+
+            else:
+
+                st.error(
+                    "The order was created, "
+                    "but subscription confirmation failed."
+                )
 
 
 # -------------------------------------------------
-# 7. ORDER STATUS
+# ORDER STATUS
 # -------------------------------------------------
 
 if st.session_state.order_confirmed:
@@ -353,11 +485,19 @@ if st.session_state.order_confirmed:
 
     order = st.session_state.plan
 
-    st.success("Order Confirmed")
+    st.success(
+        "Order Status: "
+        + str(order["status"])
+    )
 
     col1, col2 = st.columns(2)
 
     with col1:
+
+        st.write(
+            "**Order ID:** "
+            + str(order["order_id"])
+        )
 
         st.write(
             "**Cook:** "
@@ -369,30 +509,22 @@ if st.session_state.order_confirmed:
             + str(order["plan"])
         )
 
-        st.write(
-            "**Total:** ₹"
-            + str(order["total"])
-        )
-
     with col2:
 
         st.write(
-            "**Meals remaining:** "
+            "**Meals:** "
             + str(order["meals"])
         )
 
         st.write(
-            "**Status:** Order Confirmed"
+            "**Total:** ₹"
+            + str(order["total"])
         )
 
         st.write(
             "**Location:** "
             + location
         )
-
-    st.info(
-        "Your home-cooked meal order has been confirmed."
-    )
 
 
 # -------------------------------------------------
@@ -402,6 +534,6 @@ if st.session_state.order_confirmed:
 st.divider()
 
 st.caption(
-    "HomeMeal • Connecting students with affordable "
-    "home-cooked meals"
+    "HomeMeal • Connecting students with "
+    "affordable home-cooked meals"
 )
