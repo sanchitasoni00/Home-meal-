@@ -2,11 +2,6 @@ import streamlit as st
 from recommendation import get_recommendation_inputs, get_top_cooks
 from logic.order_logic import create_order, confirm_subscription
 
-st.set_page_config(
-    page_title="HomeMeal - Student",
-    page_icon="🍱",
-    layout="wide"
-)
 
 st.title("🍱 HomeMeal")
 st.subheader("Find Your Perfect Home-Cooked Meal")
