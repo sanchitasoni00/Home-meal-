@@ -45,7 +45,7 @@ def home_page():
     # -----------------------------
     # ANIMATIONS CSS
     # -----------------------------
- st.markdown("""
+    st.markdown("""
     <style>
 
     .feature-card {
