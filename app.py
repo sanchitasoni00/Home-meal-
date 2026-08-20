@@ -93,7 +93,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
     with col1:
         st.markdown("""
-    <div class="feature-card">
+        <div class="feature-card">
         <div class="icon">💰</div>
         <h3>Affordable</h3>
         <p>Find meals that fit your budget.</p>
