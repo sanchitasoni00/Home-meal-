@@ -1,205 +1,159 @@
 import json
 from pathlib import Path
-
 import streamlit as st
 
-from recommendation import (
-    get_recommendation_inputs,
-    get_top_cooks,
-)
-
+st.set_page_config(page_title="HomeMeal", page_icon="🍱", layout="wide")
 BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "data" / "cooks.json"
 
-
 @st.cache_data
 def load_cooks():
-    """Load cook information from the shared JSON file."""
-    with open(DATA_FILE, "r", encoding="utf-8") as file:
-        return json.load(file)
-
-
-def main():
-    st.set_page_config(
-        page_title="HomeMeal - Smart Recommendations",
-        page_icon="🍱",
-        layout="wide",
-    )
-
-    st.title("🍱 HomeMeal")
-    st.subheader("Smart Meal Recommendation")
-    st.write(
-        "Tell us what you want, and HomeMeal will rank the best matching "
-        "home cooks using the project's 100-point recommendation model."
-    )
-
     try:
-        cooks = load_cooks()
+        return json.loads(DATA_FILE.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        st.error("Cook data file was not found: data/cooks.json")
-        st.stop()
-    except json.JSONDecodeError:
-        st.error("Cook data contains invalid JSON.")
-        st.stop()
+        return []
 
-    if not cooks:
-        st.warning("No cooks are currently available.")
-        st.stop()
+def filter_cooks(cooks, location, vegetarian, max_price):
+    out = []
+    for c in cooks:
+        loc = str(c.get("location", "")).lower()
+        food = str(c.get("food", "")).lower()
+        if location and location.lower() not in loc:
+            continue
+        if vegetarian and "vegetarian" not in food:
+            continue
+        if float(c.get("price", 0)) > max_price:
+            continue
+        out.append(c)
+    return sorted(out, key=lambda x: (float(x.get("distance", 999)), -float(x.get("rating", 0))))
 
+def menu_items(cook):
+    m = cook.get("menu", [])
+    return [x.get("name", "Meal") if isinstance(x, dict) else str(x) for x in m] or ["Home-style Thali"]
+
+if "page" not in st.session_state: st.session_state.page = "home"
+if "location" not in st.session_state: st.session_state.location = ""
+if "max_price" not in st.session_state: st.session_state.max_price = 100
+if "vegetarian" not in st.session_state: st.session_state.vegetarian = False
+if "selected_cook" not in st.session_state: st.session_state.selected_cook = None
+if "selected_meal" not in st.session_state: st.session_state.selected_meal = None
+if "plan" not in st.session_state: st.session_state.plan = None
+if "confirmed" not in st.session_state: st.session_state.confirmed = False
+
+cooks = load_cooks()
+
+with st.sidebar:
+    st.title("🍱 HomeMeal")
+    st.caption("Fresh food. Local cooks. Smarter choices.")
+    if st.button("🏠 Home", use_container_width=True): st.session_state.page = "home"; st.rerun()
+    if st.button("🍛 Browse Cooks", use_container_width=True): st.session_state.page = "cooks"; st.rerun()
+    if st.button("🧾 My Order", use_container_width=True): st.session_state.page = "order"; st.rerun()
+    if st.button("👩‍🍳 Cook Dashboard", use_container_width=True): st.session_state.page = "dashboard"; st.rerun()
+
+if st.session_state.page == "home":
+    st.title("🍱 HomeMeal")
+    st.subheader("Find affordable, reliable home-cooked meals near you.")
     st.divider()
-
-    st.header("1. Your Preferences")
-
-    prices = []
-    for cook in cooks:
-        try:
-            prices.append(float(cook.get("price", 0)))
-        except (TypeError, ValueError):
-            pass
-
-    default_budget = min(prices) if prices else 100
-    max_budget = max(500, int(max(prices)) + 100) if prices else 500
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        budget = st.number_input(
-            "Budget (₹)",
-            min_value=1,
-            max_value=10000,
-            value=int(default_budget),
-            step=10,
-        )
-
-        meal_options = sorted(
-            {
-                meal
-                for cook in cooks
-                for meal in (
-                    cook.get("meals", [])
-                    if isinstance(cook.get("meals", []), list)
-                    else [cook.get("meal_type", "")]
-                )
-                if meal
-            }
-        )
-        meal_type = st.selectbox(
-            "What type of meal?",
-            meal_options or ["Lunch", "Dinner"],
-        )
-
-    with col2:
-        food_options = sorted(
-            {
-                cook.get("food_preference", cook.get("food_type", ""))
-                for cook in cooks
-                if cook.get("food_preference", cook.get("food_type", ""))
-            }
-        )
-        food_preference = st.selectbox(
-            "Food preference",
-            food_options or ["North Indian", "South Indian"],
-        )
-
-        spice_options = sorted(
-            {
-                cook.get("spice_level", "")
-                for cook in cooks
-                if cook.get("spice_level", "")
-            }
-        )
-        spice_level = st.selectbox(
-            "Spice level",
-            spice_options or ["Mild", "Medium", "Spicy"],
-        )
-
-    st.caption(
-        "The spice level is collected as required by the MVP. "
-        "The provided scoring plan does not assign spice a separate weight, "
-        "so the score remains out of 100."
-    )
-
-    recommend = st.button(
-        "🔎 Find Best Cooks",
-        type="primary",
-        use_container_width=True,
-    )
-
-    if recommend:
-        preferences = get_recommendation_inputs(
-            budget=budget,
-            meal_type=meal_type,
-            food_preference=food_preference,
-            spice_level=spice_level,
-        )
-
-        recommendations = get_top_cooks(cooks, preferences, limit=3)
-
-        st.divider()
-        st.header("2. Recommended Cooks")
-
-        if not recommendations:
-            st.warning("No recommendations are available.")
-            return
-
-        for index, cook in enumerate(recommendations, start=1):
-            score = cook["score"]
-            breakdown = cook["score_breakdown"]
-
-            with st.container(border=True):
-                left, right = st.columns([4, 1])
-
-                with left:
-                    st.subheader(
-                        f"{index}. {cook.get('name', 'Unknown Cook')}"
-                    )
-                    st.write(cook.get("description", "Home-cooked meals"))
-                    st.write(
-                        f"**₹{cook.get('price', 'N/A')}** per meal  •  "
-                        f"⭐ {cook.get('rating', 'N/A')}  •  "
-                        f"📍 {cook.get('distance_km', 'N/A')} km"
-                    )
-                    st.write(
-                        f"**Food:** {cook.get('food_preference', 'N/A')}  |  "
-                        f"**Meals:** {', '.join(cook.get('meals', []))}  |  "
-                        f"**Spice:** {cook.get('spice_level', 'N/A')}"
-                    )
-
-                with right:
-                    st.metric("Match Score", f"{score}/100")
-
-                with st.expander("Why this cook was recommended"):
-                    st.write(
-                        f"Price match: **{breakdown['price']}/25**"
-                    )
-                    st.write(
-                        f"Food preference: **"
-                        f"{breakdown['food_preference']}/25**"
-                    )
-                    st.write(
-                        f"Meal match: **{breakdown['meal']}/20**"
-                    )
-                    st.write(
-                        f"Rating: **{breakdown['rating']}/15**"
-                    )
-                    st.write(
-                        f"Distance: **{breakdown['distance']}/15**"
-                    )
-
-                    if cook["spice_match"]:
-                        st.success("Spice level matches your preference.")
-                    else:
-                        st.info(
-                            "Spice level differs from your preference; "
-                            "it was not added as a separate score component."
-                        )
-
+    st.header("🏠 Find a meal that feels like home")
+    a, b = st.columns(2)
+    with a:
+        location = st.text_input("📍 College / Area", st.session_state.location, placeholder="Example: Panchkula")
+        max_price = st.number_input("💰 Maximum price per meal", 20, 1000, st.session_state.max_price, 10)
+    with b:
+        vegetarian = st.checkbox("🥗 Vegetarian only", st.session_state.vegetarian)
+        meal_type = st.selectbox("🍽️ Meal", ["Lunch", "Dinner"])
+    if st.button("🔍 Find Nearby Home Cooks", type="primary", use_container_width=True):
+        st.session_state.location, st.session_state.max_price = location, max_price
+        st.session_state.vegetarian = vegetarian
+        st.session_state.meal_type = meal_type
+        st.session_state.page = "cooks"
+        st.rerun()
     st.divider()
-    st.caption(
-        "HomeMeal Member 5 • Recommendation Engine MVP • "
-        "Simple scoring first, AI API later."
-    )
+    x = st.columns(4)
+    for col, text in zip(x, ["1️⃣ Enter area", "2️⃣ Find cooks", "3️⃣ Choose meal", "4️⃣ Confirm order"]):
+        col.info(text)
 
+elif st.session_state.page == "cooks":
+    st.title("🍛 Nearby Home Cooks")
+    results = filter_cooks(cooks, st.session_state.location, st.session_state.vegetarian, st.session_state.max_price)
+    st.caption(f"Area: {st.session_state.location or 'Any'} • Budget: ₹{st.session_state.max_price}")
+    if not results:
+        st.warning("No exact matches. Try increasing your budget or changing the area.")
+        results = cooks
+    for i, c in enumerate(results):
+        with st.container(border=True):
+            left, mid, right = st.columns([2.5, 2, 1])
+            with left:
+                st.subheader("👩‍🍳 " + c.get("name", "Home Cook"))
+                st.write(f"📍 {c.get('location','Local')} • {float(c.get('distance',0)):.1f} km")
+                st.write("🍛 " + c.get("food", "Home Food"))
+                if c.get("verified", True): st.success("✓ Verified home cook")
+            with mid:
+                st.metric("⭐ Rating", f"{float(c.get('rating',0)):.1f}/5")
+                st.metric("💰 Price", f"₹{c.get('price',0)}")
+            with right:
+                if st.button("View Menu", key=f"view_{i}"):
+                    st.session_state.selected_cook = c
+                    st.session_state.page = "menu"
+                    st.rerun()
 
-if __name__ == "__main__":
-    main()
+elif st.session_state.page == "menu":
+    c = st.session_state.selected_cook
+    if not c: st.session_state.page = "cooks"; st.rerun()
+    st.title("👩‍🍳 " + c.get("name", "Home Cook"))
+    st.write(f"⭐ {float(c.get('rating',0)):.1f} • 📍 {c.get('location','Local')} • ₹{c.get('price',0)} per meal")
+    st.header("🍽️ Today's Menu")
+    st.session_state.selected_meal = st.radio("Choose a meal", menu_items(c))
+    if st.button("Continue to Meal Plan →", type="primary"):
+        st.session_state.page = "subscription"; st.rerun()
+    if st.button("← Back"): st.session_state.page = "cooks"; st.rerun()
+
+elif st.session_state.page == "subscription":
+    c = st.session_state.selected_cook
+    st.title("🧾 Choose Your Meal Plan")
+    price = float(c.get("price", 50))
+    plan_name = st.radio("Plan", ["1 Meal", "3 Meals"], horizontal=True)
+    count = 1 if plan_name == "1 Meal" else 3
+    meal_time = st.selectbox("Meal time", ["Lunch", "Dinner"])
+    st.write(f"**Cook:** {c.get('name')}")
+    st.write(f"**Meal:** {st.session_state.selected_meal}")
+    st.write(f"**Amount:** ₹{price*count:.0f}")
+    if st.button("✅ Confirm Subscription", type="primary", use_container_width=True):
+        st.session_state.plan = {"name": plan_name, "time": meal_time, "amount": price*count}
+        st.session_state.confirmed = True
+        st.session_state.page = "order"
+        st.rerun()
+
+elif st.session_state.page == "order":
+    st.title("📦 Order Status")
+    if not st.session_state.confirmed:
+        st.info("No active order.")
+    else:
+        c = st.session_state.selected_cook
+        p = st.session_state.plan
+        st.success("🎉 Your HomeMeal order is confirmed!")
+        st.write(f"**Cook:** {c.get('name')}")
+        st.write(f"**Meal:** {st.session_state.selected_meal}")
+        st.write(f"**Plan:** {p['name']} • {p['time']}")
+        st.metric("Amount", f"₹{p['amount']:.0f}")
+        st.write("✅ Subscription confirmed")
+        st.write("🟡 Cook notified")
+        st.write("⚪ Meal preparation")
+        st.caption("Prototype: payment and delivery are simulated.")
+
+elif st.session_state.page == "dashboard":
+    st.title("👩‍🍳 Home Cook Dashboard")
+    c = cooks[0] if cooks else {}
+    a,b,d,e = st.columns(4)
+    a.metric("⭐ Rating", c.get("rating", 4.7))
+    b.metric("🍱 Today's Orders", 8 if st.session_state.confirmed else 7)
+    d.metric("👥 Capacity", c.get("capacity", 20))
+    e.metric("💰 Earnings", f"₹{(8 if st.session_state.confirmed else 7)*float(c.get('price',50)):.0f}")
+    st.divider()
+    st.subheader("🍛 Today's Menu")
+    for item in menu_items(c): st.write("• " + item)
+    st.subheader("📦 Recent Orders")
+    st.success("New order received!" if st.session_state.confirmed else "No new orders in this demo session.")
+
+st.divider()
+st.caption("🍱 HomeMeal • SIH Internal Hackathon Prototype • Member 1")
