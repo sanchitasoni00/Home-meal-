@@ -385,7 +385,7 @@ def home_page():
 
     user_type = st.radio(
         "I am a:",
-        ["Student", "Home Cook"],
+        ["User", "Home Cook"],
         horizontal=True
     )
 
@@ -394,23 +394,23 @@ def home_page():
 
 
     # =====================================================
-    # STUDENT OPTION
+    # USER OPTION
     # =====================================================
 
-    if user_type == "Student":
+    if user_type == "User":
 
         st.info(
-            "🎓 Students can search for meals, compare "
+            "🎓 User can search for meals, compare "
             "cooks and place orders."
         )
 
 
         if st.button(
-            "🍱 Open Student Dashboard",
+            "🍱 Open User Dashboard",
             use_container_width=True
         ):
 
-            go_to("student")
+            go_to("User")
 
             st.rerun()
 
@@ -443,7 +443,7 @@ def home_page():
 
 def student_dashboard():
 
-    st.title("👨‍🎓 Student Dashboard")
+    st.title("👨‍🎓 User Dashboard")
 
 
     st.write(
@@ -466,7 +466,7 @@ def student_dashboard():
     # STUDENT PROFILE
     # =====================================================
 
-    st.subheader("👤 Student Profile")
+    st.subheader("👤 User Profile")
 
 
     col1, col2 = st.columns(2)
