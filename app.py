@@ -301,7 +301,7 @@ def home_page():
 
     with col1:
 
-        st.markdown("""
+        st.html("""
         <div class="feature-card">
 
             <div class="icon">
@@ -317,7 +317,7 @@ def home_page():
             </p>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
     # -----------------------------
@@ -326,7 +326,7 @@ def home_page():
 
     with col2:
 
-        st.markdown("""
+        st.html("""
         <div class="feature-card">
 
             <div class="icon">
@@ -342,7 +342,7 @@ def home_page():
             </p>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
     # -----------------------------
@@ -351,7 +351,7 @@ def home_page():
 
     with col3:
 
-        st.markdown("""
+        st.html("""
         <div class="feature-card">
 
             <div class="icon">
@@ -367,7 +367,7 @@ def home_page():
             </p>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
 
     # =====================================================
