@@ -28,17 +28,92 @@ def go_to(page):
 
 def home_page():
 
-    st.title("🍱 Ghar Ka Khana, Ghar Se Khamai")
+st.markdown("""
+<style>
 
-    st.subheader(
-        "Fresh, Affordable & Home-Cooked Meals for Students and Other Users"
-    )
+.hero {
+    text-align: center;
+    padding: 35px 20px 25px 20px;
+    animation: heroFade 1.2s ease-out;
+}
 
-    st.write(
-        "HomeMeal connects students and Other Users with trusted local home cooks "
-        "and helps them discover affordable meals based on "
-        "their preferences."
-    )
+.hero-logo {
+    font-size: 65px;
+    margin-bottom: 5px;
+    animation: floatLogo 3s ease-in-out infinite;
+}
+
+.hero-title {
+    font-size: 52px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #166534, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.hero-subtitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 12px;
+}
+
+.hero-description {
+    font-size: 17px;
+    color: #6b7280;
+    max-width: 750px;
+    margin: 12px auto 0 auto;
+    line-height: 1.6;
+}
+
+@keyframes heroFade {
+    from {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatLogo {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+</style>
+
+<div class="hero">
+
+    <div class="hero-logo">🍱</div>
+
+    <h1 class="hero-title">
+        Ghar Ka Khana, Ghar Se Khamai
+    </h1>
+
+    <div class="hero-subtitle">
+        Fresh • Affordable • Home-Cooked
+    </div>
+
+    <div class="hero-description">
+        Discover delicious homemade meals from trusted local cooks,
+        made with care and designed to fit your budget.
+    </div>
+
+</div>
+""", unsafe_allow_html=True)
 
     st.divider()
 
