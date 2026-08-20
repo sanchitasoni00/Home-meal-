@@ -2,32 +2,35 @@ import json
 from pathlib import Path
 import streamlit as st
 
+from logic.order_logic import (
+    get_orders_for_cook,
+    update_order_status,
+    calculate_earnings
+)
+
 
 # -------------------------------------------------
 # HOME MEAL - MEMBER 3
-# Cook Dashboard
+# COOK DASHBOARD
 # -------------------------------------------------
 
 BASE_DIR = Path(__file__).resolve().parent
-
 COOKS_FILE = BASE_DIR / "data" / "cooks.json"
-ORDERS_FILE = BASE_DIR / "data" / "orders.json"
 
 
 # -------------------------------------------------
-# LOAD DATA
+# LOAD COOKS
 # -------------------------------------------------
 
-def load_json(file_path, default):
+def load_cooks():
     try:
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(COOKS_FILE, "r", encoding="utf-8") as file:
             return json.load(file)
     except Exception:
-        return default
+        return []
 
 
-cooks = load_json(COOKS_FILE, [])
-orders = load_json(ORDERS_FILE, [])
+cooks = load_cooks()
 
 
 # -------------------------------------------------
@@ -45,40 +48,30 @@ st.set_page_config(
 # SELECT COOK
 # -------------------------------------------------
 
-if cooks:
+st.sidebar.title("👩‍🍳 Cook Panel")
 
-    cook_names = [
-        cook.get("name", "Home Cook")
-        for cook in cooks
-    ]
+if not cooks:
 
-    selected_name = st.sidebar.selectbox(
-        "Select Cook",
-        cook_names
-    )
+    st.error("No cooks found in cooks.json")
+    st.stop()
 
-    cook = next(
-        (
-            item for item in cooks
-            if item.get("name") == selected_name
-        ),
-        cooks[0]
-    )
+cook_names = [
+    cook.get("name", "Home Cook")
+    for cook in cooks
+]
 
-else:
+selected_name = st.sidebar.selectbox(
+    "Select Cook",
+    cook_names
+)
 
-    cook = {
-        "id": 1,
-        "name": "Sample Home Cook",
-        "price": 80,
-        "food_preference": "North Indian",
-        "rating": 4.5,
-        "distance_km": 1.5,
-        "spice_level": "Medium",
-        "description": "Fresh home-cooked meals.",
-        "meals": ["Lunch", "Dinner"]
-    }
-
+cook = next(
+    (
+        item for item in cooks
+        if item.get("name") == selected_name
+    ),
+    cooks[0]
+)
 
 cook_id = cook.get("id")
 
@@ -94,52 +87,41 @@ st.subheader(
 )
 
 st.write(
-    "Manage your profile, meals, orders and earnings."
+    "Manage your meals, orders and earnings."
 )
 
 st.divider()
 
 
 # -------------------------------------------------
-# FIND COOK ORDERS
+# GET REAL ORDERS
 # -------------------------------------------------
 
-cook_orders = []
-
-for order in orders:
-
-    if str(order.get("cook_id")) == str(cook_id):
-        cook_orders.append(order)
+cook_orders = get_orders_for_cook(cook_id)
 
 
 # -------------------------------------------------
-# SUMMARY CARDS
+# SUMMARY
 # -------------------------------------------------
 
-today_orders = len(cook_orders)
+total_orders = len(cook_orders)
 
-active_orders = len(
-    [
-        order
-        for order in cook_orders
-        if order.get("status", "").lower()
-        not in ["completed", "cancelled"]
-    ]
-)
+active_orders = len([
+    order
+    for order in cook_orders
+    if order.get("status") in
+    ["Pending", "Confirmed"]
+])
 
-price_per_meal = cook.get("price", 0)
-
-estimated_earnings = (
-    today_orders * price_per_meal
-)
+earnings = calculate_earnings(cook_id)
 
 
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.metric(
-        "Today's Orders",
-        today_orders
+        "Total Orders",
+        total_orders
     )
 
 with col2:
@@ -150,14 +132,14 @@ with col2:
 
 with col3:
     st.metric(
-        "Daily Capacity",
-        cook.get("daily_capacity", 25)
+        "Rating",
+        "⭐ " + str(cook.get("rating", 0))
     )
 
 with col4:
     st.metric(
-        "Estimated Earnings",
-        "₹" + str(estimated_earnings)
+        "Earnings",
+        "₹" + str(earnings)
     )
 
 
@@ -165,10 +147,10 @@ st.divider()
 
 
 # -------------------------------------------------
-# PROFILE
+# COOK PROFILE
 # -------------------------------------------------
 
-st.header("👤 Cook Profile")
+st.header("👤 My Profile")
 
 col1, col2 = st.columns(2)
 
@@ -180,7 +162,7 @@ with col1:
     )
 
     st.write(
-        "**Food Type:** "
+        "**Food:** "
         + cook.get(
             "food_preference",
             "Not specified"
@@ -215,114 +197,73 @@ with col2:
     )
 
 
-# -------------------------------------------------
-# VERIFICATION
-# -------------------------------------------------
-
-if cook.get("verified", True):
-
-    st.success("✓ Verified Home Cook")
-
-else:
-
-    st.warning("Verification Pending")
-
+st.success("✓ Verified Home Cook")
 
 st.divider()
 
 
 # -------------------------------------------------
-# TODAY'S MENU
+# MENU
 # -------------------------------------------------
 
 st.header("🍛 Today's Menu")
 
-menu_items = cook.get("menu", [])
+meals = cook.get("meals", [])
 
-if menu_items:
+if meals:
 
-    for item in menu_items:
-
-        st.write("• " + str(item))
+    for meal in meals:
+        st.write("• " + str(meal))
 
 else:
 
-    st.info(
-        "Today's sample menu is based on the cook's "
-        "available meal type."
-    )
-
-    meals = cook.get("meals", [])
-
-    if meals:
-
-        for meal in meals:
-            st.write(
-                "• " + str(meal)
-                + " - Home-cooked meal"
-            )
+    st.info("No meals added yet.")
 
 
 st.write(
-    "**Price:** ₹"
+    "**Price per meal:** ₹"
     + str(cook.get("price", 0))
-    + " per meal"
 )
-
-
-# -------------------------------------------------
-# PRICE & CAPACITY
-# -------------------------------------------------
-
-st.header("💰 Price & Daily Capacity")
-
-col1, col2 = st.columns(2)
-
-with col1:
-
-    st.metric(
-        "Price per Meal",
-        "₹" + str(cook.get("price", 0))
-    )
-
-with col2:
-
-    st.metric(
-        "Maximum Daily Meals",
-        cook.get("daily_capacity", 25)
-    )
 
 
 st.divider()
 
 
 # -------------------------------------------------
-# ORDERS
+# REAL ORDERS
 # -------------------------------------------------
 
-st.header("📦 Subscriber / Order List")
+st.header("📦 Student Orders")
 
-if cook_orders:
+if not cook_orders:
+
+    st.info(
+        "No orders yet. Orders placed by students "
+        "will appear here."
+    )
+
+else:
 
     for order in cook_orders:
 
-        with st.container():
+        order_id = order.get(
+            "order_id",
+            "Unknown"
+        )
 
-            st.write(
-                "**Order ID:** "
-                + str(
-                    order.get(
-                        "order_id",
-                        order.get("id", "N/A")
-                    )
-                )
-            )
+        st.subheader(
+            "Order " + str(order_id)
+        )
+
+        col1, col2 = st.columns(2)
+
+        with col1:
 
             st.write(
                 "**Student:** "
                 + str(
                     order.get(
-                        "student_id",
+                        "student_name",
                         "Student"
                     )
                 )
@@ -339,7 +280,7 @@ if cook_orders:
             )
 
             st.write(
-                "**Meal Type:** "
+                "**Meal:** "
                 + str(
                     order.get(
                         "meal_type",
@@ -348,134 +289,101 @@ if cook_orders:
                 )
             )
 
-            status = order.get(
-                "status",
-                "Pending"
+        with col2:
+
+            st.write(
+                "**Amount:** ₹"
+                + str(
+                    order.get(
+                        "total",
+                        0
+                    )
+                )
             )
 
-            if status.lower() == "confirmed":
-
-                st.success(
-                    "Status: " + status
+            st.write(
+                "**Current Status:** "
+                + str(
+                    order.get(
+                        "status",
+                        "Pending"
+                    )
                 )
-
-            elif status.lower() == "completed":
-
-                st.info(
-                    "Status: " + status
-                )
-
-            else:
-
-                st.warning(
-                    "Status: " + status
-                )
-
-            st.divider()
-
-else:
-
-    st.info(
-        "No orders have been received yet."
-    )
+            )
 
 
-# -------------------------------------------------
-# EARNINGS
-# -------------------------------------------------
+        # -----------------------------------------
+        # UPDATE STATUS
+        # -----------------------------------------
 
-st.header("💵 Earnings")
-
-st.write(
-    "Today's Orders: "
-    + str(today_orders)
-)
-
-st.write(
-    "Price per Meal: ₹"
-    + str(price_per_meal)
-)
-
-st.metric(
-    "Estimated Today's Earnings",
-    "₹" + str(estimated_earnings)
-)
-
-st.caption(
-    "This is a simple MVP estimate. "
-    "Advanced accounting is not included."
-)
-
-
-# -------------------------------------------------
-# ORDER STATUS
-# -------------------------------------------------
-
-st.header("🔄 Order Status")
-
-if cook_orders:
-
-    for order in cook_orders:
+        statuses = [
+            "Pending",
+            "Confirmed",
+            "Completed"
+        ]
 
         current_status = order.get(
             "status",
             "Pending"
         )
 
+        if current_status not in statuses:
+            current_status = "Pending"
+
         new_status = st.selectbox(
-            "Status for Order "
-            + str(
-                order.get(
-                    "order_id",
-                    order.get("id", "N/A")
-                )
+            "Change order status",
+            statuses,
+            index=statuses.index(
+                current_status
             ),
-            [
-                "Pending",
-                "Confirmed",
-                "Completed"
-            ],
-            index=(
-                [
-                    "Pending",
-                    "Confirmed",
-                    "Completed"
-                ].index(current_status)
-                if current_status in
-                ["Pending", "Confirmed", "Completed"]
-                else 0
-            ),
-            key="status_" + str(
-                order.get(
-                    "order_id",
-                    order.get("id", "N/A")
-                )
-            )
+            key="status_" + str(order_id)
         )
 
+
         if st.button(
-            "Update Status",
-            key="update_" + str(
-                order.get(
-                    "order_id",
-                    order.get("id", "N/A")
-                )
-            )
+            "Update Order",
+            key="update_" + str(order_id)
         ):
 
-            order["status"] = new_status
-
-            st.success(
-                "Order status changed to "
-                + new_status
+            updated_order = update_order_status(
+                order_id,
+                new_status
             )
 
-else:
+            if updated_order:
 
-    st.info(
-        "Order status will appear here when "
-        "students place orders."
-    )
+                st.success(
+                    "Order updated to "
+                    + new_status
+                )
+
+                st.rerun()
+
+            else:
+
+                st.error(
+                    "Could not update the order."
+                )
+
+
+        st.divider()
+
+
+# -------------------------------------------------
+# EARNINGS
+# -------------------------------------------------
+
+st.header("💰 Earnings")
+
+st.metric(
+    "Total Confirmed/Completed Earnings",
+    "₹" + str(earnings)
+)
+
+st.write(
+    "Earnings are calculated from confirmed "
+    "and completed orders."
+)
 
 
 # -------------------------------------------------
@@ -485,5 +393,5 @@ else:
 st.divider()
 
 st.caption(
-    "HomeMeal • Home Cook Dashboard • SIH MVP"
+    "HomeMeal • Cook Dashboard • SIH MVP"
 )
