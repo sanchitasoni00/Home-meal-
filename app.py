@@ -256,7 +256,7 @@ def home_page():
     # HERO SECTION
     # =====================================================
 
-    st.markdown("""
+    st.html("""
     <div class="hero">
 
         <div class="hero-icon">
