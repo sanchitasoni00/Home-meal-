@@ -46,7 +46,7 @@ def home_page():
     # FEATURES
     # -----------------------------
 
-    col1, col2, col3 = st.columns(3)
+   
 st.markdown("""
 <style>
 .feature-card {
@@ -91,26 +91,35 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-    with col1:
-        st.markdown("""
-        <div class="feature-card">
+ col1, col2, col3 = st.columns(3)
+   col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div class="feature-card">
         <div class="icon">💰</div>
         <h3>Affordable</h3>
         <p>Find meals that fit your budget.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    with col2:
-        st.markdown("### 🏠 Home-Cooked")
-        st.write(
-            "Discover fresh meals prepared by local home cooks."
-        )
+with col2:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="icon">🏠</div>
+        <h3>Home-Cooked</h3>
+        <p>Fresh meals prepared by local home cooks.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    with col3:
-        st.markdown("### ⭐ Smart Matching")
-        st.write(
-            "Get recommendations based on your preferences."
-        )
+with col3:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="icon">❤️</div>
+        <h3>Trusted</h3>
+        <p>Connect with reliable local cooks.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.divider()
 
