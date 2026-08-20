@@ -27,23 +27,26 @@ def go_to(page):
 # =========================================================
 
 def home_page():
+     # =======================================================
+    # HERO HEADING
+    # =======================================================
+     
+    st.markdown("""
+    <style>
 
-st.markdown("""
-<style>
-
-.hero {
+    .hero {
     text-align: center;
     padding: 35px 20px 25px 20px;
     animation: heroFade 1.2s ease-out;
 }
 
-.hero-logo {
+    .hero-logo {
     font-size: 65px;
     margin-bottom: 5px;
     animation: floatLogo 3s ease-in-out infinite;
 }
 
-.hero-title {
+    .hero-title {
     font-size: 52px;
     font-weight: 800;
     background: linear-gradient(90deg, #166534, #22c55e);
@@ -52,30 +55,30 @@ st.markdown("""
     margin: 0;
 }
 
-.hero-subtitle {
-    font-size: 22px;
-    font-weight: 600;
-    color: #374151;
-    margin-top: 12px;
+    .hero-subtitle {
+        font-size: 22px;
+        font-weight: 600;
+        color: #374151;
+        margin-top: 12px;
 }
 
-.hero-description {
-    font-size: 17px;
-    color: #6b7280;
-    max-width: 750px;
-    margin: 12px auto 0 auto;
-    line-height: 1.6;
+    .hero-description {
+        font-size: 17px;
+        color: #6b7280;
+        max-width: 750px;
+        margin: 12px auto 0 auto;
+        line-height: 1.6;
 }
 
 @keyframes heroFade {
-    from {
-        opacity: 0;
-        transform: translateY(-25px);
+        from {
+            opacity: 0;
+            transform: translateY(-25px);
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+       to {
+           opacity: 1;
+           transform: translateY(0);
     }
 }
 
@@ -114,6 +117,8 @@ st.markdown("""
 
 </div>
 """, unsafe_allow_html=True)
+   
+   
 
     st.divider()
 
