@@ -43,7 +43,7 @@ def home_page():
     st.divider()
 
     # -----------------------------
-    # FEATURES
+    # ANIMATIONS CSS
     # -----------------------------
 
    
