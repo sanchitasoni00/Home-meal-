@@ -1,4 +1,4 @@
-# HomeMeal — Member 5 
+# HomeMeal 
 # 🍱 HomeMeal
 
 ### 🏠 Connecting Students with Fresh, Affordable Home-Cooked Meals
