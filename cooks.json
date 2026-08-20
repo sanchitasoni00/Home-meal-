@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "name": "Sharma Home Kitchen",
+    "price": 100,
+    "food_preference": "North Indian",
+    "meals": [
+      "Lunch",
+      "Dinner"
+    ],
+    "spice_level": "Medium",
+    "rating": 4.9,
+    "distance_km": 1.2,
+    "description": "Fresh North Indian home-style meals."
+  },
+  {
+    "id": 2,
+    "name": "Gupta Home Meals",
+    "price": 90,
+    "food_preference": "North Indian",
+    "meals": [
+      "Lunch",
+      "Dinner"
+    ],
+    "spice_level": "Mild",
+    "rating": 4.6,
+    "distance_km": 2.5,
+    "description": "Affordable home-cooked vegetarian meals."
+  },
+  {
+    "id": 3,
+    "name": "HomeTaste Kitchen",
+    "price": 110,
+    "food_preference": "South Indian",
+    "meals": [
+      "Lunch"
+    ],
+    "spice_level": "Medium",
+    "rating": 4.8,
+    "distance_km": 3.0,
+    "description": "South Indian dishes prepared at home."
+  },
+  {
+    "id": 4,
+    "name": "Annapurna Meals",
+    "price": 80,
+    "food_preference": "North Indian",
+    "meals": [
+      "Lunch"
+    ],
+    "spice_level": "Spicy",
+    "rating": 4.3,
+    "distance_km": 4.2,
+    "description": "Budget-friendly North Indian lunch."
+  },
+  {
+    "id": 5,
+    "name": "Maa's Kitchen",
+    "price": 120,
+    "food_preference": "Punjabi",
+    "meals": [
+      "Dinner"
+    ],
+    "spice_level": "Medium",
+    "rating": 4.7,
+    "distance_km": 1.8,
+    "description": "Traditional Punjabi home-style dinner."
+  },
+  {
+    "id": 6,
+    "name": "Healthy Home Bites",
+    "price": 100,
+    "food_preference": "North Indian",
+    "meals": [
+      "Lunch",
+      "Dinner"
+    ],
+    "spice_level": "Mild",
+    "rating": 4.5,
+    "distance_km": 2.0,
+    "description": "Light, balanced home-cooked meals."
+  }
+]
