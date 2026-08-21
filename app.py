@@ -464,47 +464,36 @@ def home_page():
 # =========================================================
 # STUDENT DASHBOARD
 # =========================================================
+def student_dashboard():
 
-def User_dashboard():
     st.title("👨‍🎓 User Dashboard")
-
 
     st.write(
         "Welcome to HomeMeal! Find fresh and affordable "
         "home-cooked meals near you."
     )
 
-
     if st.button("⬅️ Back to Home"):
-
         go_to("home")
-
         st.rerun()
-
 
     st.divider()
 
-
     # =====================================================
-    # STUDENT PROFILE
+    # USER PROFILE
     # =====================================================
 
     st.subheader("👤 User Profile")
 
-
     col1, col2 = st.columns(2)
 
-
     with col1:
-
         name = st.text_input(
             "Your Name",
             placeholder="Enter your name"
         )
 
-
     with col2:
-
         budget = st.selectbox(
             "Meal Budget",
             [
@@ -515,9 +504,7 @@ def User_dashboard():
             ]
         )
 
-
     st.divider()
-
 
     # =====================================================
     # AVAILABLE MEALS
@@ -525,87 +512,55 @@ def User_dashboard():
 
     st.subheader("🍱 Available Home Meals")
 
+    if len(st.session_state.meals) == 0:
 
-    meal1, meal2, meal3 = st.columns(3)
+        st.info("No meals are available right now.")
 
+    else:
 
-    # -----------------------------
-    # RAJMA
-    # -----------------------------
+        # Display meals dynamically
+        meal_columns = st.columns(3)
 
-    with meal1:
+        for index, meal in enumerate(st.session_state.meals):
 
-        st.markdown("### 🍛 Rajma Chawal")
+            with meal_columns[index % 3]:
 
-        st.write("👨‍🍳 Home Cook: Priya")
+                st.markdown(
+                    f"### 🍱 {meal['name']}"
+                )
 
-        st.write("⭐ 4.8/5")
+                st.write(
+                    f"👨‍🍳 Home Cook: {meal['cook']}"
+                )
 
-        st.write("💰 ₹70")
+                st.write(
+                    f"⭐ {meal['rating']}/5"
+                )
 
+                st.write(
+                    f"💰 ₹{meal['price']}"
+                )
 
-        if st.button(
-            "🛒 Order Rajma Chawal",
-            key="rajma"
-        ):
+                if st.button(
+                    f"🛒 Order {meal['name']}",
+                    key=f"order_{index}_{meal['name']}"
+                ):
 
-            st.success(
-                "Rajma Chawal added to your order!"
-            )
+                    new_order = {
+                        "meal": meal["name"],
+                        "cook": meal["cook"],
+                        "price": meal["price"],
+                        "customer": name if name else "Guest",
+                        "status": "Placed"
+                    }
 
+                    st.session_state.orders.append(new_order)
 
-    # -----------------------------
-    # THALI
-    # -----------------------------
-
-    with meal2:
-
-        st.markdown("### 🥗 Veg Thali")
-
-        st.write("👨‍🍳 Home Cook: Neha")
-
-        st.write("⭐ 4.7/5")
-
-        st.write("💰 ₹90")
-
-
-        if st.button(
-            "🛒 Order Veg Thali",
-            key="thali"
-        ):
-
-            st.success(
-                "Veg Thali added to your order!"
-            )
-
-
-    # -----------------------------
-    # PASTA
-    # -----------------------------
-
-    with meal3:
-
-        st.markdown("### 🍝 Pasta")
-
-        st.write("👨‍🍳 Home Cook: Anjali")
-
-        st.write("⭐ 4.6/5")
-
-        st.write("💰 ₹100")
-
-
-        if st.button(
-            "🛒 Order Pasta",
-            key="pasta"
-        ):
-
-            st.success(
-                "Pasta added to your order!"
-            )
-
+                    st.success(
+                        f"✅ Order placed for {meal['name']}!"
+                    )
 
     st.divider()
-
 
     # =====================================================
     # SEARCH
@@ -613,33 +568,73 @@ def User_dashboard():
 
     st.subheader("🔎 Find Your Meal")
 
-
     search = st.text_input(
         "Search meals",
         placeholder="Example: Rajma, Thali, Pasta..."
     )
 
-
     if search:
 
-        st.info(
-            f"Searching HomeMeal for: **{search}**"
-        )
+        found_meals = [
+            meal for meal in st.session_state.meals
+            if search.lower() in meal["name"].lower()
+        ]
 
+        if found_meals:
+
+            st.success(
+                f"Found {len(found_meals)} meal(s) matching '{search}'."
+            )
+
+        else:
+
+            st.warning(
+                f"No meals found for '{search}'."
+            )
 
     st.divider()
 
-
     # =====================================================
-    # STUDENT ORDERS
+    # MY ORDERS
     # =====================================================
 
     st.subheader("📦 My Orders")
 
+    if not st.session_state.orders:
 
-    st.success(
-        "No active orders right now. Start exploring meals!"
-    )
+        st.info(
+            "No orders yet. Start exploring meals!"
+        )
+
+    else:
+
+        for index, order in enumerate(
+            reversed(st.session_state.orders)
+        ):
+
+            with st.container(border=True):
+
+                st.write(
+                    f"### 🍱 {order['meal']}"
+                )
+
+                st.write(
+                    f"👨‍🍳 Cook: {order['cook']}"
+                )
+
+                st.write(
+                    f"👤 Customer: {order['customer']}"
+                )
+
+                st.write(
+                    f"💰 Price: ₹{order['price']}"
+                )
+
+                st.success(
+                    f"📍 Order Status: {order['status']}"
+                )
+
+
 
 
 # =========================================================
