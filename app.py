@@ -17,6 +17,30 @@ st.set_page_config(
 
 if "page" not in st.session_state:
     st.session_state.page = "home"
+if "meals" not in st.session_state:
+    st.session_state.meals = [
+        {
+            "name": "Rajma Chawal",
+            "cook": "Priya",
+            "rating": "4.8",
+            "price": 70
+        },
+        {
+            "name": "Veg Thali",
+            "cook": "Neha",
+            "rating": "4.7",
+            "price": 90
+        },
+        {
+            "name": "Pasta",
+            "cook": "Anjali",
+            "rating": "4.6",
+            "price": 100
+        }
+    ]
+
+if "orders" not in st.session_state:
+    st.session_state.orders = []
 
 
 def go_to(page):
