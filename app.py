@@ -769,16 +769,11 @@ def cook_dashboard():
             max_value=100,
             value=10
         )
-
-
     if st.button(
-        "➕ Add Meal",
-        use_container_width=True
-    ):
-        if st.button(
     "➕ Add Meal",
     use_container_width=True
 ):
+
     if meal_name.strip():
 
         new_meal = {
@@ -802,9 +797,8 @@ def cook_dashboard():
             "Please enter a meal name."
         )
 
-      
 
-  
+ 
 
 
     st.divider()
