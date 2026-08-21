@@ -102,7 +102,7 @@ st.session_state.meals
      
 
 if "orders" not in st.session_state:
-    st.session_state.orders = database["orders']
+    st.session_state.orders = database["orders"]
 
 if "next_meal_id" not in st.session_state:
     st.session_state.next_meal_id = 4
