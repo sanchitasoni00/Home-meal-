@@ -1,4 +1,5 @@
 import streamlit as st
+from supabase import create_client
 
 # =========================================================
 # PAGE CONFIGURATION
@@ -9,8 +10,15 @@ st.set_page_config(
     page_icon="🍱",
     layout="wide"
 )
-
-
+==========================================================
+# CONNECT TO SUPABASE
+==========================================================
+supabase = create_client(
+    st.secrets["https://phfcfmfsljbarzakhszy.supabase.co/rest/v1/"],
+    st.secrets["sb_publishable_wqZ5bf-Jfa42VTOGQtBPfw_uff2MkW9"]
+)
+#TEST CONNECTION
+st.sucess("supabase connected sucessfully")
 # =========================================================
 # SESSION STATE
 # =========================================================
@@ -860,3 +868,6 @@ elif st.session_state.page == "User":
 elif st.session_state.page == "cook":
 
     cook_dashboard()
+    import streamlit as st
+from supabase import create_client
+
