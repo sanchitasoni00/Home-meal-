@@ -26,7 +26,7 @@ if "meals" not in st.session_state:
             "cook": "Navneet ",
             "rating": 4.8,
             "price": 70,
-            "quantity": 10
+            "quantity": 7
         },
         {
             "id": 2,
@@ -34,7 +34,7 @@ if "meals" not in st.session_state:
             "cook": "Neha",
             "rating": 4.7,
             "price": 90,
-            "quantity": 10
+            "quantity": 6
         },
         {
             "id": 3,
@@ -42,7 +42,7 @@ if "meals" not in st.session_state:
             "cook": "Anjali",
             "rating": 4.6,
             "price": 100,
-            "quantity": 10
+            "quantity": 4
         }
     ]
 
