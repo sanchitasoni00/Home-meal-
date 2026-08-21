@@ -775,18 +775,37 @@ def cook_dashboard():
         "➕ Add Meal",
         use_container_width=True
     ):
+    if st.button(
+    "➕ Add Meal",
+    use_container_width=True
+):
 
-        if meal_name.strip():
+    if meal_name.strip():
 
-            st.success(
-                f"{meal_name} has been added successfully!"
-            )
+        new_meal = {
+            "name": meal_name,
+            "cook": cook_name if cook_name else "Home Cook",
+            "rating": "5.0",
+            "price": price
+        }
 
-        else:
+        st.session_state.meals.append(new_meal)
 
-            st.warning(
-                "Please enter a meal name."
-            )
+        st.success(
+            f"✅ {meal_name} has been added to HomeMeal!"
+        )
+
+        st.rerun()
+
+    else:
+
+        st.warning(
+            "Please enter a meal name."
+        )
+
+      
+
+  
 
 
     st.divider()
@@ -797,84 +816,66 @@ def cook_dashboard():
     # =====================================================
 
     st.subheader("📦 Recent Orders")
+    if not st.session_state.orders:
 
+    st.info(
+        "No orders have been placed yet."
+    )
 
-    order1, order2, order3 = st.columns(3)
+else:
 
+    for index, order in enumerate(
+        reversed(st.session_state.orders)
+    ):
 
-    # -----------------------------
-    # ORDER 1
-    # -----------------------------
+        with st.container(border=True):
 
-    with order1:
-
-        st.markdown("### Order #001")
-
-        st.write("🍛 Rajma Chawal")
-
-        st.write("👤 Student")
-
-        st.write("💰 ₹70")
-
-
-        if st.button(
-            "✅ Accept",
-            key="accept1"
-        ):
-
-            st.success(
-                "Order accepted!"
+            st.markdown(
+                f"### 🧾 Order #{len(st.session_state.orders) - index:03d}"
             )
 
-
-    # -----------------------------
-    # ORDER 2
-    # -----------------------------
-
-    with order2:
-
-        st.markdown("### Order #002")
-
-        st.write("🥗 Veg Thali")
-
-        st.write("👤 Student")
-
-        st.write("💰 ₹90")
-
-
-        if st.button(
-            "✅ Accept",
-            key="accept2"
-        ):
-
-            st.success(
-                "Order accepted!"
+            st.write(
+                f"🍱 Meal: {order['meal']}"
             )
 
-
-    # -----------------------------
-    # ORDER 3
-    # -----------------------------
-
-    with order3:
-
-        st.markdown("### Order #003")
-
-        st.write("🍝 Pasta")
-
-        st.write("👤 Student")
-
-        st.write("💰 ₹100")
-
-
-        if st.button(
-            "✅ Accept",
-            key="accept3"
-        ):
-
-            st.success(
-                "Order accepted!"
+            st.write(
+                f"👤 Customer: {order['customer']}"
             )
+
+            st.write(
+                f"💰 Price: ₹{order['price']}"
+            )
+
+            st.write(
+                f"📍 Status: **{order['status']}**"
+            )
+
+            if order["status"] == "Placed":
+
+                if st.button(
+                    "✅ Accept Order",
+                    key=f"accept_order_{index}"
+                ):
+
+                    # Find the actual order
+                    actual_index = (
+                        len(st.session_state.orders)
+                        - 1
+                        - index
+                    )
+
+                    st.session_state.orders[
+                        actual_index
+                    ]["status"] = "Accepted"
+
+                    st.success(
+                        "Order accepted successfully!"
+                    )
+
+                    st.rerun()
+
+
+    
 
 
 # =========================================================
