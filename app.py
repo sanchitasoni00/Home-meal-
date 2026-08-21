@@ -775,7 +775,7 @@ def cook_dashboard():
         "➕ Add Meal",
         use_container_width=True
     ):
-    if st.button(
+        if st.button(
     "➕ Add Meal",
     use_container_width=True
 ):
