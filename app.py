@@ -17,34 +17,127 @@ st.set_page_config(
 
 if "page" not in st.session_state:
     st.session_state.page = "home"
+
 if "meals" not in st.session_state:
     st.session_state.meals = [
         {
+            "id": 1,
             "name": "Rajma Chawal",
             "cook": "Priya",
-            "rating": "4.8",
-            "price": 70
+            "rating": 4.8,
+            "price": 70,
+            "quantity": 10
         },
         {
+            "id": 2,
             "name": "Veg Thali",
             "cook": "Neha",
-            "rating": "4.7",
-            "price": 90
+            "rating": 4.7,
+            "price": 90,
+            "quantity": 10
         },
         {
+            "id": 3,
             "name": "Pasta",
             "cook": "Anjali",
-            "rating": "4.6",
-            "price": 100
+            "rating": 4.6,
+            "price": 100,
+            "quantity": 10
         }
     ]
 
 if "orders" not in st.session_state:
     st.session_state.orders = []
 
+if "next_meal_id" not in st.session_state:
+    st.session_state.next_meal_id = 4
+
+if "next_order_id" not in st.session_state:
+    st.session_state.next_order_id = 1
+
+if "cook_name" not in st.session_state:
+    st.session_state.cook_name = ""
+
+
+# =========================================================
+# NAVIGATION
+# =========================================================
 
 def go_to(page):
     st.session_state.page = page
+
+
+# =========================================================
+# CUSTOM CSS
+# =========================================================
+
+st.markdown("""
+<style>
+
+.hero {
+    text-align: center;
+    padding: 35px 20px 25px 20px;
+}
+
+.hero-icon {
+    font-size: 65px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 800;
+    margin: 10px 0;
+    background: linear-gradient(
+        90deg,
+        #166534,
+        #22c55e,
+        #15803d
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-tagline {
+    font-size: 21px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.hero-description {
+    font-size: 16px;
+    color: #6b7280;
+    max-width: 750px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+.feature-card {
+    background: linear-gradient(
+        135deg,
+        #f0fff4,
+        #ffffff
+    );
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    border: 2px solid #d8f3dc;
+    min-height: 180px;
+}
+
+.feature-icon {
+    font-size: 45px;
+}
+
+.meal-card {
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid #d1d5db;
+    background: rgba(255,255,255,0.04);
+    margin-bottom: 15px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 # =========================================================
@@ -53,234 +146,7 @@ def go_to(page):
 
 def home_page():
 
-    # =====================================================
-    # CUSTOM CSS + ANIMATIONS
-    # =====================================================
-
     st.markdown("""
-    <style>
-
-    /* =====================================================
-       HERO SECTION
-       ===================================================== */
-
-    .hero {
-        text-align: center;
-        padding: 35px 20px 30px 20px;
-        animation: heroFade 1.2s ease-out;
-    }
-
-
-    /* Floating food icon */
-
-    .hero-icon {
-        font-size: 70px;
-        display: inline-block;
-        animation: floatLogo 3s ease-in-out infinite;
-    }
-
-
-    /* Main heading */
-
-    .hero-title {
-        font-size: 52px;
-        font-weight: 800;
-        margin: 5px 0 10px 0;
-
-        background: linear-gradient(
-            90deg,
-            #166534,
-            #22c55e,
-            #15803d
-        );
-
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-
-    /* Tagline */
-
-    .hero-tagline {
-        font-size: 22px;
-        font-weight: 600;
-        color: #374151;
-        margin-bottom: 12px;
-    }
-
-
-    /* Description */
-
-    .hero-description {
-        font-size: 17px;
-        color: #6b7280;
-        max-width: 750px;
-        margin: auto;
-        line-height: 1.6;
-    }
-
-
-    /* Small badge */
-
-    .hero-badge {
-        display: inline-block;
-        margin-top: 18px;
-        padding: 8px 18px;
-        border-radius: 30px;
-
-        background: #dcfce7;
-        color: #166534;
-
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-
-    /* Hero entrance animation */
-
-    @keyframes heroFade {
-
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-    }
-
-
-    /* Food icon animation */
-
-    @keyframes floatLogo {
-
-        0% {
-            transform: translateY(0px);
-        }
-
-        50% {
-            transform: translateY(-10px);
-        }
-
-        100% {
-            transform: translateY(0px);
-        }
-
-    }
-
-
-    /* =====================================================
-       FEATURE CARDS
-       ===================================================== */
-
-    .feature-card {
-
-        background: linear-gradient(
-            135deg,
-            #f0fff4,
-            #ffffff
-        );
-
-        padding: 25px;
-
-        border-radius: 20px;
-
-        text-align: center;
-
-        border: 2px solid #d8f3dc;
-
-        box-shadow:
-            0 5px 15px rgba(0, 0, 0, 0.08);
-
-        transition: all 0.3s ease;
-
-        min-height: 180px;
-    }
-
-
-    /* Card hover animation */
-
-    .feature-card:hover {
-
-        transform:
-            translateY(-10px)
-            scale(1.03);
-
-        box-shadow:
-            0 15px 30px rgba(0, 0, 0, 0.15);
-    }
-
-
-    /* Card icons */
-
-    .icon {
-
-        font-size: 45px;
-
-        display: inline-block;
-
-        animation:
-            floatCardIcon 2s ease-in-out infinite;
-    }
-
-
-    @keyframes floatCardIcon {
-
-        0% {
-            transform: translateY(0px);
-        }
-
-        50% {
-            transform: translateY(-8px);
-        }
-
-        100% {
-            transform: translateY(0px);
-        }
-
-    }
-
-
-    .feature-card h3 {
-
-        color: #166534;
-
-        margin-bottom: 8px;
-    }
-
-
-    .feature-card p {
-
-        color: #555;
-
-        font-size: 15px;
-    }
-
-
-    /* =====================================================
-       GET STARTED
-       ===================================================== */
-
-    .get-started {
-
-        text-align: center;
-
-        padding: 15px;
-    }
-
-
-    </style>
-    """, unsafe_allow_html=True)
-
-
-    # =====================================================
-    # HERO SECTION
-    # =====================================================
-
-    st.html("""
     <div class="hero">
 
         <div class="hero-icon">
@@ -301,155 +167,103 @@ def home_page():
             your budget.
         </div>
 
-        <div class="hero-badge">
-            🏠 Made with care by local home cooks
-        </div>
-
     </div>
-    """)
-
+    """, unsafe_allow_html=True)
 
     st.divider()
 
-
     # =====================================================
-    # FEATURE CARDS
+    # FEATURES
     # =====================================================
 
     col1, col2, col3 = st.columns(3)
 
-
-    # -----------------------------
-    # AFFORDABLE
-    # -----------------------------
-
     with col1:
 
-        st.html("""
+        st.markdown("""
         <div class="feature-card">
 
-            <div class="icon">
-                💰
-            </div>
+            <div class="feature-icon">💰</div>
 
-            <h3>
-                Affordable
-            </h3>
+            <h3>Affordable</h3>
 
             <p>
-                Find meals that fit your budget.
+                Find delicious meals that fit your budget.
             </p>
 
         </div>
-        """)
-
-
-    # -----------------------------
-    # HOME COOKED
-    # -----------------------------
+        """, unsafe_allow_html=True)
 
     with col2:
 
-        st.html("""
+        st.markdown("""
         <div class="feature-card">
 
-            <div class="icon">
-                🏠
-            </div>
+            <div class="feature-icon">🏠</div>
 
-            <h3>
-                Home-Cooked
-            </h3>
+            <h3>Home-Cooked</h3>
 
             <p>
                 Fresh meals prepared by local home cooks.
             </p>
 
         </div>
-        """)
-
-
-    # -----------------------------
-    # TRUSTED
-    # -----------------------------
+        """, unsafe_allow_html=True)
 
     with col3:
 
-        st.html("""
+        st.markdown("""
         <div class="feature-card">
 
-            <div class="icon">
-                ❤️
-            </div>
+            <div class="feature-icon">❤️</div>
 
-            <h3>
-                Trusted
-            </h3>
+            <h3>Trusted</h3>
 
             <p>
                 Connect with reliable local cooks.
             </p>
 
         </div>
-        """)
-
-
-    # =====================================================
-    # GET STARTED
-    # =====================================================
+        """, unsafe_allow_html=True)
 
     st.divider()
 
-    st.markdown("""
-    <div class="get-started">
-        <h1>🚀 Get Started</h1>
-    </div>
-    """, unsafe_allow_html=True)
+    # =====================================================
+    # CHOOSE ROLE
+    # =====================================================
 
+    st.markdown(
+        "<h2 style='text-align:center;'>🚀 Get Started</h2>",
+        unsafe_allow_html=True
+    )
 
     user_type = st.radio(
-        "I am a:",
+        "I am:",
         ["User", "Home Cook"],
         horizontal=True
     )
 
-
-    st.write("")
-
-
-    # =====================================================
-    # USER OPTION
-    # =====================================================
-
     if user_type == "User":
 
         st.info(
-            "🎓 User can search for meals, compare "
-            "cooks and place orders."
+            "👤 Users can discover meals, compare cooks "
+            "and place orders."
         )
 
-
         if st.button(
-            "🍱 Open User Dashboard",
+            "👤 Open User Dashboard",
             use_container_width=True
         ):
 
             go_to("User")
-
             st.rerun()
-
-
-    # =====================================================
-    # HOME COOK OPTION
-    # =====================================================
 
     else:
 
         st.info(
-            "👨‍🍳 Home cooks can view orders, manage meals "
-            "and track earnings."
+            "👨‍🍳 Home cooks can add meals, view orders "
+            "and manage their food business."
         )
-
 
         if st.button(
             "👨‍🍳 Open Cook Dashboard",
@@ -457,23 +271,24 @@ def home_page():
         ):
 
             go_to("cook")
-
             st.rerun()
 
 
 # =========================================================
 # USER DASHBOARD
 # =========================================================
+
 def User_dashboard():
 
-    st.title("👨‍🎓 User Dashboard")
+    st.title("👤 User Dashboard")
 
     st.write(
-        "Welcome to HomeMeal! Find fresh and affordable "
-        "home-cooked meals near you."
+        "Welcome to HomeMeal! Discover fresh, affordable "
+        "and delicious home-cooked meals near you."
     )
 
     if st.button("⬅️ Back to Home"):
+
         go_to("home")
         st.rerun()
 
@@ -483,19 +298,22 @@ def User_dashboard():
     # USER PROFILE
     # =====================================================
 
-    st.subheader("👤 User Profile")
+    st.subheader("👤 Your Profile")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        name = st.text_input(
+
+        user_name = st.text_input(
             "Your Name",
-            placeholder="Enter your name"
+            placeholder="Enter your name",
+            key="user_name"
         )
 
     with col2:
+
         budget = st.selectbox(
-            "Meal Budget",
+            "Preferred Meal Budget",
             [
                 "Under ₹50",
                 "₹50 - ₹100",
@@ -510,87 +328,100 @@ def User_dashboard():
     # AVAILABLE MEALS
     # =====================================================
 
-    st.subheader("🍱 Available Home Meals")
+    st.subheader("🍱 Available Home-Cooked Meals")
 
-    if len(st.session_state.meals) == 0:
+    search = st.text_input(
+        "🔎 Search meals or cooks",
+        placeholder="Example: Rajma, Thali, Priya..."
+    )
 
-        st.info("No meals are available right now.")
+    available_meals = []
+
+    for meal in st.session_state.meals:
+
+        if meal["quantity"] > 0:
+
+            if (
+                not search
+                or search.lower() in meal["name"].lower()
+                or search.lower() in meal["cook"].lower()
+            ):
+
+                available_meals.append(meal)
+
+    if not available_meals:
+
+        st.warning(
+            "No meals found. Try another search."
+        )
 
     else:
 
-        # Display meals dynamically
-        meal_columns = st.columns(3)
+        columns = st.columns(3)
 
-        for index, meal in enumerate(st.session_state.meals):
+        for index, meal in enumerate(available_meals):
 
-            with meal_columns[index % 3]:
+            with columns[index % 3]:
 
                 st.markdown(
-                    f"### 🍱 {meal['name']}"
-                )
+                    f"""
+                    <div class="meal-card">
 
-                st.write(
-                    f"👨‍🍳 Home Cook: {meal['cook']}"
-                )
+                    <h3>🍱 {meal["name"]}</h3>
 
-                st.write(
-                    f"⭐ {meal['rating']}/5"
-                )
+                    <p>👨‍🍳 Cook: {meal["cook"]}</p>
 
-                st.write(
-                    f"💰 ₹{meal['price']}"
+                    <p>⭐ {meal["rating"]}/5</p>
+
+                    <p>💰 ₹{meal["price"]}</p>
+
+                    <p>📦 Available: {meal["quantity"]}</p>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
                 )
 
                 if st.button(
                     f"🛒 Order {meal['name']}",
-                    key=f"order_{index}_{meal['name']}"
+                    key=f"order_{meal['id']}",
+                    use_container_width=True
                 ):
 
+                    customer = (
+                        user_name.strip()
+                        if user_name.strip()
+                        else "User"
+                    )
+
                     new_order = {
+                        "id": st.session_state.next_order_id,
                         "meal": meal["name"],
                         "cook": meal["cook"],
+                        "customer": customer,
                         "price": meal["price"],
-                        "customer": name if name else "Guest",
                         "status": "Placed"
                     }
 
-                    st.session_state.orders.append(new_order)
+                    st.session_state.orders.append(
+                        new_order
+                    )
+
+                    # Reduce meal quantity
+                    for saved_meal in st.session_state.meals:
+
+                        if saved_meal["id"] == meal["id"]:
+
+                            saved_meal["quantity"] -= 1
+                            break
+
+                    st.session_state.next_order_id += 1
 
                     st.success(
                         f"✅ Order placed for {meal['name']}!"
                     )
 
-    st.divider()
-
-    # =====================================================
-    # SEARCH
-    # =====================================================
-
-    st.subheader("🔎 Find Your Meal")
-
-    search = st.text_input(
-        "Search meals",
-        placeholder="Example: Rajma, Thali, Pasta..."
-    )
-
-    if search:
-
-        found_meals = [
-            meal for meal in st.session_state.meals
-            if search.lower() in meal["name"].lower()
-        ]
-
-        if found_meals:
-
-            st.success(
-                f"Found {len(found_meals)} meal(s) matching '{search}'."
-            )
-
-        else:
-
-            st.warning(
-                f"No meals found for '{search}'."
-            )
+                    st.rerun()
 
     st.divider()
 
@@ -600,7 +431,21 @@ def User_dashboard():
 
     st.subheader("📦 My Orders")
 
-    if not st.session_state.orders:
+    current_user = (
+        user_name.strip()
+        if user_name.strip()
+        else "User"
+    )
+
+    my_orders = []
+
+    for order in st.session_state.orders:
+
+        if order["customer"] == current_user:
+
+            my_orders.append(order)
+
+    if not my_orders:
 
         st.info(
             "No orders yet. Start exploring meals!"
@@ -608,33 +453,29 @@ def User_dashboard():
 
     else:
 
-        for index, order in enumerate(
-            reversed(st.session_state.orders)
-        ):
+        for order in reversed(my_orders):
 
             with st.container(border=True):
 
-                st.write(
-                    f"### 🍱 {order['meal']}"
+                st.markdown(
+                    f"### 🧾 Order #{order['id']:03d}"
                 )
 
                 st.write(
-                    f"👨‍🍳 Cook: {order['cook']}"
+                    f"🍱 **Meal:** {order['meal']}"
                 )
 
                 st.write(
-                    f"👤 Customer: {order['customer']}"
+                    f"👨‍🍳 **Cook:** {order['cook']}"
                 )
 
                 st.write(
-                    f"💰 Price: ₹{order['price']}"
+                    f"💰 **Price:** ₹{order['price']}"
                 )
 
-                st.success(
-                    f"📍 Order Status: {order['status']}"
+                st.write(
+                    f"📍 **Status:** {order['status']}"
                 )
-
-
 
 
 # =========================================================
@@ -645,21 +486,16 @@ def cook_dashboard():
 
     st.title("👨‍🍳 Home Cook Dashboard")
 
-
     st.write(
         "Manage your meals, orders and earnings from one place."
     )
 
-
     if st.button("⬅️ Back to Home"):
 
         go_to("home")
-
         st.rerun()
 
-
     st.divider()
-
 
     # =====================================================
     # COOK PROFILE
@@ -667,88 +503,122 @@ def cook_dashboard():
 
     st.subheader("👤 Cook Profile")
 
+    cook_name = st.text_input(
+        "Cook Name",
+        value=st.session_state.cook_name,
+        placeholder="Enter your name",
+        key="cook_name_input"
+    )
 
-    col1, col2 = st.columns(2)
+    st.session_state.cook_name = cook_name
 
-
-    with col1:
-
-        cook_name = st.text_input(
-            "Cook Name",
-            placeholder="Enter your name"
-        )
-
-
-    with col2:
-
-        location = st.text_input(
-            "Location",
-            placeholder="Enter your area"
-        )
-
+    location = st.text_input(
+        "Location",
+        placeholder="Enter your area"
+    )
 
     st.divider()
 
+    # =====================================================
+    # COOK ORDERS
+    # =====================================================
+
+    cook_orders = []
+
+    for order in st.session_state.orders:
+
+        if (
+            not cook_name.strip()
+            or order["cook"].lower()
+            == cook_name.strip().lower()
+        ):
+
+            cook_orders.append(order)
 
     # =====================================================
-    # DASHBOARD STATS
+    # MY MEALS
     # =====================================================
 
-    st.subheader("📊 Today's Overview")
+    my_meals = []
 
+    for meal in st.session_state.meals:
+
+        if (
+            not cook_name.strip()
+            or meal["cook"].lower()
+            == cook_name.strip().lower()
+        ):
+
+            my_meals.append(meal)
+
+    # =====================================================
+    # STATISTICS
+    # =====================================================
+
+    total_orders = len(cook_orders)
+
+    earnings = sum(
+        order["price"]
+        for order in cook_orders
+        if order["status"] in [
+            "Accepted",
+            "Completed"
+        ]
+    )
+
+    total_meals = len(my_meals)
+
+    customers = len(
+        set(
+            order["customer"]
+            for order in cook_orders
+        )
+    )
 
     col1, col2, col3, col4 = st.columns(4)
-
 
     with col1:
 
         st.metric(
             "🍱 Orders",
-            "8"
+            total_orders
         )
-
 
     with col2:
 
         st.metric(
             "💰 Earnings",
-            "₹640"
+            f"₹{earnings}"
         )
-
 
     with col3:
 
         st.metric(
-            "⭐ Rating",
-            "4.8"
+            "🍽️ Meals",
+            total_meals
         )
-
 
     with col4:
 
         st.metric(
             "👥 Customers",
-            "12"
+            customers
         )
 
-
     st.divider()
-
 
     # =====================================================
     # ADD MEAL
     # =====================================================
-    st.subheader("🍱 Add a Meal")
 
+    st.subheader("🍱 Add a Meal")
 
     meal_name = st.text_input(
         "Meal Name",
         placeholder="Example: Rajma Chawal"
     )
 
-
     col1, col2 = st.columns(2)
-
 
     with col1:
 
@@ -759,7 +629,6 @@ def cook_dashboard():
             value=50
         )
 
-
     with col2:
 
         quantity = st.number_input(
@@ -768,105 +637,200 @@ def cook_dashboard():
             max_value=100,
             value=10
         )
-if st.button(
-    "➕ Add Meal",
-    use_container_width=True
-):
-    if meal_name.strip():
 
-        new_meal = {
-            "name": meal_name,
-            "cook": cook_name if cook_name else "Home Cook",
-            "rating": "5.0",
-            "price": price
-        }
+    if st.button(
+        "➕ Add Meal",
+        use_container_width=True
+    ):
 
-        st.session_state.meals.append(new_meal)
+        if not cook_name.strip():
 
-        st.success(
-            f"✅ {meal_name} has been added to HomeMeal!"
-        )
+            st.warning(
+                "Please enter your Cook Name first."
+            )
 
-        st.rerun()
+        elif not meal_name.strip():
 
-    else:
+            st.warning(
+                "Please enter a meal name."
+            )
 
-        st.warning(
-            "Please enter a meal name."
-        )
+        else:
 
+            new_meal = {
+                "id": st.session_state.next_meal_id,
+                "name": meal_name.strip(),
+                "cook": cook_name.strip(),
+                "rating": 5.0,
+                "price": price,
+                "quantity": quantity
+            }
 
- 
+            st.session_state.meals.append(
+                new_meal
+            )
 
+            st.session_state.next_meal_id += 1
+
+            st.success(
+                f"✅ {meal_name} has been added to HomeMeal!"
+            )
+
+            st.rerun()
 
     st.divider()
 
+    # =====================================================
+    # MY ADDED MEALS
+    # =====================================================
+
+    st.subheader("🍽️ My Added Meals")
+
+    if not my_meals:
+
+        st.info(
+            "You haven't added any meals yet."
+        )
+
+    else:
+
+        for meal in my_meals:
+
+            with st.container(border=True):
+
+                col1, col2, col3 = st.columns(
+                    [3, 1, 1]
+                )
+
+                with col1:
+
+                    st.markdown(
+                        f"### 🍱 {meal['name']}"
+                    )
+
+                    st.write(
+                        f"⭐ {meal['rating']}/5"
+                    )
+
+                with col2:
+
+                    st.write(
+                        f"💰 ₹{meal['price']}"
+                    )
+
+                with col3:
+
+                    st.write(
+                        f"📦 {meal['quantity']}"
+                    )
+
+    st.divider()
 
     # =====================================================
     # RECENT ORDERS
     # =====================================================
 
     st.subheader("📦 Recent Orders")
-if not st.session_state.orders:
 
-    st.info(
-        "No orders have been placed yet."
-    )
+    if not cook_orders:
 
-else:
+        st.info(
+            "No orders have been placed yet."
+        )
 
-    for index, order in enumerate(
-        reversed(st.session_state.orders)
-    ):
+    else:
 
-        with st.container(border=True):
+        for order in reversed(cook_orders):
 
-            st.markdown(
-                f"### 🧾 Order #{len(st.session_state.orders) - index:03d}"
-            )
+            with st.container(border=True):
 
-            st.write(
-                f"🍱 Meal: {order['meal']}"
-            )
+                col1, col2 = st.columns(
+                    [4, 1]
+                )
 
-            st.write(
-                f"👤 Customer: {order['customer']}"
-            )
+                with col1:
 
-            st.write(
-                f"💰 Price: ₹{order['price']}"
-            )
-
-            st.write(
-                f"📍 Status: **{order['status']}**"
-            )
-
-            if order["status"] == "Placed":
-
-                if st.button(
-                    "✅ Accept Order",
-                    key=f"accept_order_{index}"
-                ):
-
-                    # Find the actual order
-                    actual_index = (
-                        len(st.session_state.orders)
-                        - 1
-                        - index
+                    st.markdown(
+                        f"### 🧾 Order #{order['id']:03d}"
                     )
 
-                    st.session_state.orders[
-                        actual_index
-                    ]["status"] = "Accepted"
-
-                    st.success(
-                        "Order accepted successfully!"
+                    st.write(
+                        f"🍱 **Meal:** {order['meal']}"
                     )
 
-                    st.rerun()
+                    st.write(
+                        f"👤 **User:** {order['customer']}"
+                    )
 
+                    st.write(
+                        f"💰 **Price:** ₹{order['price']}"
+                    )
 
-    
+                    st.write(
+                        f"📍 **Status:** {order['status']}"
+                    )
+
+                with col2:
+
+                    if order["status"] == "Placed":
+
+                        if st.button(
+                            "✅ Accept",
+                            key=f"accept_{order['id']}",
+                            use_container_width=True
+                        ):
+
+                            for saved_order in st.session_state.orders:
+
+                                if (
+                                    saved_order["id"]
+                                    == order["id"]
+                                ):
+
+                                    saved_order[
+                                        "status"
+                                    ] = "Accepted"
+
+                                    break
+
+                            st.success(
+                                "Order accepted!"
+                            )
+
+                            st.rerun()
+
+                    elif order["status"] == "Accepted":
+
+                        if st.button(
+                            "🎉 Complete",
+                            key=f"complete_{order['id']}",
+                            use_container_width=True
+                        ):
+
+                            for saved_order in st.session_state.orders:
+
+                                if (
+                                    saved_order["id"]
+                                    == order["id"]
+                                ):
+
+                                    saved_order[
+                                        "status"
+                                    ] = "Completed"
+
+                                    break
+
+                            st.success(
+                                "Order completed!"
+                            )
+
+                            st.rerun()
+
+                    else:
+
+                        st.success(
+                            "Completed"
+                        )
 
 
 # =========================================================
@@ -877,11 +841,9 @@ if st.session_state.page == "home":
 
     home_page()
 
-
 elif st.session_state.page == "User":
 
     User_dashboard()
-
 
 elif st.session_state.page == "cook":
 
