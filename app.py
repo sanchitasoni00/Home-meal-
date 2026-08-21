@@ -23,7 +23,7 @@ if "meals" not in st.session_state:
         {
             "id": 1,
             "name": "Rajma Chawal",
-            "cook": "Priya",
+            "cook": Navneet ",
             "rating": 4.8,
             "price": 70,
             "quantity": 10
