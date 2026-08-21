@@ -773,7 +773,7 @@ def cook_dashboard():
     "➕ Add Meal",
     use_container_width=True
 ):
-
+    
     if meal_name.strip():
 
         new_meal = {
