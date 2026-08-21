@@ -772,7 +772,7 @@ save_database(database)
             st.session_state.meals.append(
                 new_meal
             )
-            database["meals'] = st.session_state.meals
+            database["meals"] = st.session_state.meals
             save_database(database)
 
             st.session_state.next_meal_id += 1
