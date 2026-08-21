@@ -1,5 +1,5 @@
 import streamlit as st
-from supabase import create_client
+
 
 # =========================================================
 # PAGE CONFIGURATION
@@ -10,15 +10,7 @@ st.set_page_config(
     page_icon="🍱",
     layout="wide"
 )
-# ==========================================================
-# CONNECT TO SUPABASE
-# ==========================================================
-supabase = create_client(
-    st.secrets["SUPABASE_URL"],
-    st.secrets["SUPABASE_KEY"]
-)
-#TEST CONNECTION
-st.sucess("supabase connected sucessfully")
+
 # =========================================================
 # SESSION STATE
 # =========================================================
