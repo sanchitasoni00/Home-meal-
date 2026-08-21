@@ -71,7 +71,7 @@ def go_to(page):
 # CUSTOM CSS
 # =========================================================
 
-st.markdown("""
+st.html("""
 <style>
 
 .hero {
@@ -137,7 +137,7 @@ st.markdown("""
 }
 
 </style>
-""", unsafe_allow_html=True)
+""")
 
 
 # =========================================================
@@ -146,7 +146,7 @@ st.markdown("""
 
 def home_page():
 
-    st.markdown("""
+    st.html("""
     <div class="hero">
 
         <div class="hero-icon">
@@ -168,7 +168,7 @@ def home_page():
         </div>
 
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     st.divider()
 
@@ -180,7 +180,7 @@ def home_page():
 
     with col1:
 
-        st.markdown("""
+        st.html("""
         <div class="feature-card">
 
             <div class="feature-icon">💰</div>
@@ -192,11 +192,11 @@ def home_page():
             </p>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with col2:
 
-        st.markdown("""
+        st.html("""
         <div class="feature-card">
 
             <div class="feature-icon">🏠</div>
@@ -208,11 +208,11 @@ def home_page():
             </p>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with col3:
 
-        st.markdown("""
+        st.html("""
         <div class="feature-card">
 
             <div class="feature-icon">❤️</div>
@@ -224,7 +224,7 @@ def home_page():
             </p>
 
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     st.divider()
 
