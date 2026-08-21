@@ -769,11 +769,10 @@ def cook_dashboard():
             max_value=100,
             value=10
         )
-    if st.button(
+if st.button(
     "➕ Add Meal",
     use_container_width=True
 ):
-    
     if meal_name.strip():
 
         new_meal = {
