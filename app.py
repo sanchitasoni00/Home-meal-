@@ -14,8 +14,8 @@ st.set_page_config(
 # CONNECT TO SUPABASE
 # ==========================================================
 supabase = create_client(
-    st.secrets["https://phfcfmfsljbarzakhszy.supabase.co/rest/v1/"],
-    st.secrets["sb_publishable_wqZ5bf-Jfa42VTOGQtBPfw_uff2MkW9"]
+    st.secrets[""SUPABASE_URL""],
+    st.secrets["SUPABASE_KEY"]
 )
 #TEST CONNECTION
 st.sucess("supabase connected sucessfully")
