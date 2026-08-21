@@ -57,6 +57,18 @@ if "next_order_id" not in st.session_state:
 
 if "cook_name" not in st.session_state:
     st.session_state.cook_name = ""
+# =========================================================
+# FIX OLD MEAL DATA
+# =========================================================
+
+for meal in st.session_state.meals:
+
+    if "quantity" not in meal:
+        meal["quantity"] = 10
+
+    if "id" not in meal:
+        meal["id"] = st.session_state.next_meal_id
+        st.session_state.next_meal_id += 1
 
 
 # =========================================================
