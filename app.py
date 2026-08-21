@@ -66,38 +66,42 @@ if "page" not in st.session_state:
     st.session_state.page = "home"
 
 if "meals" not in st.session_state:
-    st.session_state.meals = 
-database["meals"]
-else:
-    st.session_state.meals = [
-        {
-            "id": 1,
-            "name": "Rajma Chawal",
-            "cook": "Navneet ",
-            "rating": 4.8,
-            "price": 70,
-            "quantity": 7
-        },
-        {
-            "id": 2,
-            "name": "Veg Thali",
-            "cook": "Neha",
-            "rating": 4.7,
-            "price": 90,
-            "quantity": 6
-        },
-        {
-            "id": 3,
-            "name": "Pasta",
-            "cook": "Anjali",
-            "rating": 4.6,
-            "price": 100,
-            "quantity": 4
-        }
-    ]
-    database["meals"] = 
-st.session_state.meals
-            save_database(database)
+
+    if database["meals"]:
+
+        st.session_state.meals = database["meals"]
+
+    else:
+
+        st.session_state.meals = [
+            {
+                "id": 1,
+                "name": "Rajma Chawal",
+                "cook": "Navneet",
+                "rating": 4.8,
+                "price": 70,
+                "quantity": 7
+            },
+            {
+                "id": 2,
+                "name": "Veg Thali",
+                "cook": "Neha",
+                "rating": 4.7,
+                "price": 90,
+                "quantity": 6
+            },
+            {
+                "id": 3,
+                "name": "Pasta",
+                "cook": "Anjali",
+                "rating": 4.6,
+                "price": 100,
+                "quantity": 4
+            }
+        ]
+
+        database["meals"] = st.session_state.meals
+        save_database(database)
 
      
 
