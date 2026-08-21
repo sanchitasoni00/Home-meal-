@@ -808,7 +808,7 @@ if st.button(
     # =====================================================
 
     st.subheader("📦 Recent Orders")
-    if not st.session_state.orders:
+if not st.session_state.orders:
 
     st.info(
         "No orders have been placed yet."
