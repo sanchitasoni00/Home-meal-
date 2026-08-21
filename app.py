@@ -870,9 +870,9 @@ if st.session_state.page == "home":
     home_page()
 
 
-elif st.session_state.page == "student":
+elif st.session_state.page == "user":
 
-    student_dashboard()
+    user_dashboard()
 
 
 elif st.session_state.page == "cook":
