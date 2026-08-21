@@ -1,5 +1,34 @@
 import streamlit as st
+import json
+import os
+#========================================================
+#  JSON DATABASE
+# ========================================================
+DATABASE_FILE= "database.json"
+def  laod_database():
+    if not
+os.path.exists(DATABASE_FILE):
+    database = {
+        "users"  : [],
+        "cooks":[],
+        "meals":[],
+        "orders":[]
+    }
+    with open(DATABASE_FILE,
+"w") as file :
+                   json.dump(database,
+file , indent = 4)
+          return database
+    with open(DATABASE_FILE , "r")
+as file:
+    return json.load(file)
+def save_dattabase(database):
+    with open(DATABASE_FILE , "w")
+as file:
+    json.dump(database, file,
+indent = 4)
 
+database = load_database()
 
 # =========================================================
 # PAGE CONFIGURATION
@@ -19,6 +48,9 @@ if "page" not in st.session_state:
     st.session_state.page = "home"
 
 if "meals" not in st.session_state:
+    st.session_state.meals = 
+database["meals"]
+else:
     st.session_state.meals = [
         {
             "id": 1,
@@ -45,9 +77,14 @@ if "meals" not in st.session_state:
             "quantity": 4
         }
     ]
+    database["meals"] = 
+st.session_state.meals
+            save_database(database)
+
+     
 
 if "orders" not in st.session_state:
-    st.session_state.orders = []
+    st.session_state.orders = database["orders']
 
 if "next_meal_id" not in st.session_state:
     st.session_state.next_meal_id = 4
@@ -333,6 +370,22 @@ def User_dashboard():
                 "Above ₹150"
             ]
         )
+if user_name.strip():
+    existing_user = None
+for user in database ["users"]:
+    if users["name"].lower() == user_name.strip.lower():
+        existing_user = user
+        break
+    if existing_user:
+        existing_user["budget"] = budget
+    else:
+        database["users"].append(
+            {
+                "name": user_name.strip(),
+                "budget":budget
+            }
+        )
+save_database(database)
 
     st.divider()
 
@@ -418,6 +471,9 @@ def User_dashboard():
                     st.session_state.orders.append(
                         new_order
                     )
+                    database["orders"] = st.session_state.orders
+                    save_database(database)
+                    
 
                     # Reduce meal quantity
                     for saved_meal in st.session_state.meals:
@@ -528,6 +584,22 @@ def cook_dashboard():
         "Location",
         placeholder="Enter your area"
     )
+if cook_name.strip():
+    existing_cook = None
+    for cook in database["cooks"]:
+        if cook["name"].lower() == cook_name.strip().lower():
+            existing_cook = cook
+            break
+if existing_cook:
+    existing_cook["location"] = location
+else:
+      database["cooks"].append(
+          {
+              "name" : cook_name.strip()
+              "location" : location
+          }
+      )
+save_database(database)
 
     st.divider()
 
@@ -539,6 +611,7 @@ def cook_dashboard():
 
     for order in st.session_state.orders:
 
+        
         if (
             not cook_name.strip()
             or order["cook"].lower()
@@ -681,6 +754,8 @@ def cook_dashboard():
             st.session_state.meals.append(
                 new_meal
             )
+            database["meals'] = st.session_state.meals
+            save_database(database)
 
             st.session_state.next_meal_id += 1
 
@@ -804,6 +879,8 @@ def cook_dashboard():
                                     ] = "Accepted"
 
                                     break
+                          database["orders"] = st.session_state.orders
+                          save_database(database)
 
                             st.success(
                                 "Order accepted!"
@@ -831,6 +908,8 @@ def cook_dashboard():
                                     ] = "Completed"
 
                                     break
+                             database["orders"] = st.session_state.orders
+                             save_database(database)
 
                             st.success(
                                 "Order completed!"
