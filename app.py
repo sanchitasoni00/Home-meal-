@@ -112,28 +112,28 @@ st.html("""
 }
 
 .feature-card {
-    background: linear-gradient(
-        135deg,
-        #f0fff4,
-        #ffffff
-    );
+    background: #eafff0;
     padding: 25px;
     border-radius: 20px;
     text-align: center;
-    border: 2px solid #d8f3dc;
+    border: 2px solid #86efac;
     min-height: 180px;
+    color: #14532d;
+}
+
+.feature-card h3 {
+    color: #14532d !important;
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.feature-card p {
+    color: #166534 !important;
+    font-size: 16px;
 }
 
 .feature-icon {
     font-size: 45px;
-}
-
-.meal-card {
-    padding: 20px;
-    border-radius: 18px;
-    border: 1px solid #d1d5db;
-    background: rgba(255,255,255,0.04);
-    margin-bottom: 15px;
 }
 
 </style>
