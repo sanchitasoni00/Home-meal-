@@ -1,36 +1,53 @@
 import streamlit as st
 import json
 import os
-#========================================================
-#  JSON DATABASE
-# ========================================================
-DATABASE_FILE= "database.json"
-def  laod_database():
-    
- if not
-os.path.exists(DATABASE_FILE):
-    database = {
-        "users"  : [],
-        "cooks":[],
-        "meals":[],
-        "orders":[]
-    }
-    with open(DATABASE_FILE,
-"w") as file :
-                   json.dump(database,
-file , indent = 4)
-          return database
-    with open(DATABASE_FILE , "r")
-as file:
-    return json.load(file)
-def save_dattabase(database):
-    with open(DATABASE_FILE , "w")
-as file:
-    json.dump(database, file,
-indent = 4)
+
+# =========================================================
+# JSON DATABASE
+# =========================================================
+
+DATABASE_FILE = "database.json"
+
+
+def load_database():
+
+    if not os.path.exists(DATABASE_FILE):
+
+        database = {
+            "users": [],
+            "cooks": [],
+            "meals": [],
+            "orders": []
+        }
+
+        with open(DATABASE_FILE, "w", encoding="utf-8") as file:
+            json.dump(database, file, indent=4)
+
+        return database
+
+    with open(DATABASE_FILE, "r", encoding="utf-8") as file:
+        database = json.load(file)
+
+    database.setdefault("users", [])
+    database.setdefault("cooks", [])
+    database.setdefault("meals", [])
+    database.setdefault("orders", [])
+
+    return database
+
+
+def save_database(database):
+
+    with open(DATABASE_FILE, "w", encoding="utf-8") as file:
+        json.dump(
+            database,
+            file,
+            indent=4,
+            ensure_ascii=False
+        )
+
 
 database = load_database()
-
 # =========================================================
 # PAGE CONFIGURATION
 # =========================================================
