@@ -19,10 +19,9 @@ def load_database():
 if not os.path.exists(DATABASE_FILE):
         with open(DATABASE_FILE, "w", encoding="utf-8") as file:
             json.dump(default_database, file, indent=4)
- return default_database
-
-try:
-    with open(DATABASE_FILE, "r", encoding="utf-8") as file:
+            return default_database
+            try:
+     with open(DATABASE_FILE, "r", encoding="utf-8") as file:
         database = json.load(file)
 except (json.JSONDecodeError, ValueError):
     database = default_database
