@@ -537,11 +537,9 @@ if not my_orders:
             "No orders yet. Start exploring meals!"
         )
 
-    else:
-
-        for order in reversed(my_orders):
-
-            with st.container(border=True):
+else:
+       for order in reversed(my_orders):
+           with st.container(border=True):
 
                 st.markdown(
                     f"### 🧾 Order #{order['id']:03d}"
