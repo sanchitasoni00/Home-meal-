@@ -585,11 +585,36 @@ def User_dashboard():
 
     else:
 
-        columns = st.columns(3)
+    columns = st.columns(3)
 
-        for index, meal in enumerate(available_meals):
+    for index, meal in enumerate(available_meals):
 
-            with columns[index % 3]:
+        with columns[index % 3]:
+
+            # ⭐ FIND COOK RATING
+            cook_rating = 5.0
+            cook_rating_count = 0
+
+            for cook in database["cooks"]:
+
+                if (
+                    cook.get("name", "").lower()
+                    == meal["cook"].lower()
+                ):
+
+                    cook_rating = cook.get(
+                        "rating",
+                        5.0
+                    )
+
+                    cook_rating_count = cook.get(
+                        "rating_count",
+                        0
+                    )
+
+                    break
+
+                
 
                 st.html(
                     f"""
@@ -602,7 +627,9 @@ def User_dashboard():
                         </p>
 
                         <p>
-                            ⭐ <b>Rating:</b> {meal.get("rating", 5.0)}/5
+                            ⭐ <b>Rating:</b> 
+                            {cook_rating}/5
+                            ({cook_rating_count}ratings)
                         </p>
 
                         <p>
@@ -636,7 +663,8 @@ def User_dashboard():
                         "cook": meal["cook"],
                         "customer": customer,
                         "price": meal["price"],
-                        "status": "Placed"
+                        "status": "Placed",
+                        "rating": None
                     }
 
                     # Add order
@@ -720,6 +748,29 @@ def User_dashboard():
                 st.write(
                     f"📍 **Status:** {order['status']}"
                 )
+            # =========================================
+            # ⭐ RATING GOES HERE
+            # =========================================
+
+            if order["status"] == "Completed":
+
+                if order.get("rating") is None:
+
+                    st.markdown("### ⭐ Rate Your Cook")
+
+                    rating = st.radio(
+                        "How was your experience?",
+                        [1, 2, 3, 4, 5],
+                        format_func=lambda x: "⭐" * x,
+                        horizontal=True,
+                        key=f"rating_{order['id']}"
+                    )
+
+                    if st.button(
+                        "⭐ Submit Rating",
+                        key=f"submit_rating_{order['id']}",
+                        use_container_width=True
+                    ):
 
 
 # =========================================================
@@ -786,6 +837,9 @@ def cook_dashboard():
                 {
                     "name": cook_name.strip(),
                     "location": location
+                    "ratings": [],
+                    "rating": 5.0,
+                    "rating_count": 0
                 }
             )
 
