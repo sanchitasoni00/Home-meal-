@@ -414,7 +414,7 @@ st.divider()
     # AVAILABLE MEALS
     # =====================================================
 
-    st.subheader("🍱 Available Home-Cooked Meals")
+st.subheader("🍱 Available Home-Cooked Meals")
 
     search = st.text_input(
         "🔎 Search meals or cooks",
