@@ -435,8 +435,7 @@ for meal in st.session_state.meals:
 
                 available_meals.append(meal)
 
-    if not available_meals:
-
+if not available_meals:
         st.warning(
             "No meals found. Try another search."
         )
