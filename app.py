@@ -617,7 +617,7 @@ else:
       )
 save_database(database)
 
-    st.divider()
+st.divider()
 
     # =====================================================
     # COOK ORDERS
