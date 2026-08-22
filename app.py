@@ -817,20 +817,16 @@ st.divider()
     # RECENT ORDERS
     # =====================================================
 
-    st.subheader("📦 Recent Orders")
+st.subheader("📦 Recent Orders")
 
-    if not cook_orders:
-
-        st.info(
+if not cook_orders:
+    st.info(
             "No orders have been placed yet."
         )
 
-    else:
-
+else:
         for order in reversed(cook_orders):
-
             with st.container(border=True):
-
                 col1, col2 = st.columns(
                     [4, 1]
                 )
