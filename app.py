@@ -651,9 +651,9 @@ for meal in st.session_state.meals:
     # STATISTICS
     # =====================================================
 
-    total_orders = len(cook_orders)
+total_orders = len(cook_orders)
 
-    earnings = sum(
+earnings = sum(
         order["price"]
         for order in cook_orders
         if order["status"] in [
@@ -662,7 +662,7 @@ for meal in st.session_state.meals:
         ]
     )
 
-    total_meals = len(my_meals)
+total_meals = len(my_meals)
 
     customers = len(
         set(
