@@ -531,7 +531,7 @@ for order in st.session_state.orders:
 
             my_orders.append(order)
 
-    if not my_orders:
+if not my_orders:
 
         st.info(
             "No orders yet. Start exploring meals!"
