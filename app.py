@@ -623,7 +623,7 @@ st.divider()
     # COOK ORDERS
     # =====================================================
 
-    cook_orders = []
+cook_orders = []
 
     for order in st.session_state.orders:
 
