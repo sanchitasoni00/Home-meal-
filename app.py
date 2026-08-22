@@ -611,7 +611,7 @@ if existing_cook:
 else:
       database["cooks"].append(
           {
-              "name" : cook_name.strip()
+              "name" : cook_name.strip() ,
               "location" : location
           }
       )
