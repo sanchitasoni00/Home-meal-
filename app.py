@@ -515,7 +515,7 @@ st.divider()
     # MY ORDERS
     # =====================================================
 
-    st.subheader("📦 My Orders")
+st.subheader("📦 My Orders")
 
     current_user = (
         user_name.strip()
