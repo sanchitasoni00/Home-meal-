@@ -517,7 +517,7 @@ st.divider()
 
 st.subheader("📦 My Orders")
 
-    current_user = (
+current_user = (
         user_name.strip()
         if user_name.strip()
         else "User"
