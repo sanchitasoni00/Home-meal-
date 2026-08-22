@@ -783,11 +783,8 @@ if not my_meals:
         )
 
     else:
-
         for meal in my_meals:
-
             with st.container(border=True):
-
                 col1, col2, col3 = st.columns(
                     [3, 1, 1]
                 )
