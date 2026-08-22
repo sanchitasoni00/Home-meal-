@@ -591,7 +591,7 @@ def User_dashboard():
 
             with columns[index % 3]:
 
-                st.markdown(
+                st.html(
                     f"""
                     <div class="meal-card">
 
@@ -614,8 +614,7 @@ def User_dashboard():
                         </p>
 
                     </div>
-                    """,
-                    unsafe_allow_html=True
+                    """
                 )
 
                 if st.button(
