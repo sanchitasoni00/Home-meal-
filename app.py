@@ -94,9 +94,9 @@ if "page" not in st.session_state:
     st.session_state.page = "home"
 
 
-# ---------------------------------------------------------
-# Meals
-# ---------------------------------------------------------
+# =========================================================
+# MEALS
+# =========================================================
 
 if "meals" not in st.session_state:
 
@@ -137,17 +137,17 @@ if "meals" not in st.session_state:
         save_database(database)
 
 
-# ---------------------------------------------------------
-# Orders
-# ---------------------------------------------------------
+# =========================================================
+# ORDERS
+# =========================================================
 
 if "orders" not in st.session_state:
     st.session_state.orders = database["orders"]
 
 
-# ---------------------------------------------------------
-# Find next meal ID
-# ---------------------------------------------------------
+# =========================================================
+# NEXT MEAL ID
+# =========================================================
 
 if "next_meal_id" not in st.session_state:
 
@@ -165,9 +165,9 @@ if "next_meal_id" not in st.session_state:
         st.session_state.next_meal_id = 1
 
 
-# ---------------------------------------------------------
-# Find next order ID
-# ---------------------------------------------------------
+# =========================================================
+# NEXT ORDER ID
+# =========================================================
 
 if "next_order_id" not in st.session_state:
 
@@ -185,9 +185,9 @@ if "next_order_id" not in st.session_state:
         st.session_state.next_order_id = 1
 
 
-# ---------------------------------------------------------
-# Cook name
-# ---------------------------------------------------------
+# =========================================================
+# COOK NAME
+# =========================================================
 
 if "cook_name" not in st.session_state:
     st.session_state.cook_name = ""
@@ -215,8 +215,45 @@ for meal in st.session_state.meals:
         meal["name"] = "Unnamed Meal"
 
 
-# Save corrected old data
+# =========================================================
+# FIX OLD COOK DATA
+# =========================================================
+
+for cook in database["cooks"]:
+
+    if "name" not in cook:
+        cook["name"] = "Unknown Cook"
+
+    if "location" not in cook:
+        cook["location"] = ""
+
+    if "ratings" not in cook:
+        cook["ratings"] = []
+
+    if "rating" not in cook:
+        cook["rating"] = 5.0
+
+    if "rating_count" not in cook:
+        cook["rating_count"] = len(cook["ratings"])
+
+
+# =========================================================
+# FIX OLD ORDER DATA
+# =========================================================
+
+for order in st.session_state.orders:
+
+    if "status" not in order:
+        order["status"] = "Placed"
+
+    if "rating" not in order:
+        order["rating"] = None
+
+
+# Save corrected data
 database["meals"] = st.session_state.meals
+database["orders"] = st.session_state.orders
+
 save_database(database)
 
 
@@ -561,7 +598,6 @@ def User_dashboard():
 
     for meal in st.session_state.meals:
 
-        # Make sure quantity exists
         quantity = meal.get("quantity", 0)
 
         if quantity > 0:
@@ -585,59 +621,63 @@ def User_dashboard():
 
     else:
 
-    columns = st.columns(3)
+        columns = st.columns(3)
 
-    for index, meal in enumerate(available_meals):
+        for index, meal in enumerate(available_meals):
 
-        with columns[index % 3]:
+            with columns[index % 3]:
 
-            # ⭐ FIND COOK RATING
-            cook_rating = 5.0
-            cook_rating_count = 0
+                # =================================================
+                # FIND COOK RATING
+                # =================================================
 
-            for cook in database["cooks"]:
+                cook_rating = 5.0
+                cook_rating_count = 0
 
-                if (
-                    cook.get("name", "").lower()
-                    == meal["cook"].lower()
-                ):
+                for cook in database["cooks"]:
 
-                    cook_rating = cook.get(
-                        "rating",
-                        5.0
-                    )
+                    if (
+                        cook.get("name", "").lower()
+                        == meal.get("cook", "").lower()
+                    ):
 
-                    cook_rating_count = cook.get(
-                        "rating_count",
-                        0
-                    )
+                        cook_rating = cook.get(
+                            "rating",
+                            5.0
+                        )
 
-                    break
+                        cook_rating_count = cook.get(
+                            "rating_count",
+                            0
+                        )
 
-                
+                        break
 
                 st.html(
                     f"""
                     <div class="meal-card">
 
-                        <h3>🍱 {meal["name"]}</h3>
+                        <h3>🍱 {meal.get("name", "Meal")}</h3>
 
                         <p>
-                            👨‍🍳 <b>Cook:</b> {meal["cook"]}
+                            👨‍🍳 <b>Cook:</b>
+                            {meal.get("cook", "Unknown")}
                         </p>
 
                         <p>
-                            ⭐ <b>Rating:</b> 
+                            ⭐ <b>Rating:</b>
                             {cook_rating}/5
-                            ({cook_rating_count}ratings)
+                            ({cook_rating_count} ratings)
                         </p>
 
                         <p>
-                            💰 <b>Price:</b> ₹{meal["price"]}
+                            💰 <b>Price:</b>
+                            ₹{meal.get("price", 0)}
                         </p>
 
                         <p>
-                            📦 <b>Available:</b> {meal["quantity"]}
+                            📦 <b>Available:</b>
+                            {meal.get("quantity", 0)}
                         </p>
 
                     </div>
@@ -656,7 +696,6 @@ def User_dashboard():
                         else "User"
                     )
 
-                    # Create new order
                     new_order = {
                         "id": st.session_state.next_order_id,
                         "meal": meal["name"],
@@ -667,12 +706,11 @@ def User_dashboard():
                         "rating": None
                     }
 
-                    # Add order
                     st.session_state.orders.append(
                         new_order
                     )
 
-                    # Reduce quantity
+                    # Reduce meal quantity
                     for saved_meal in st.session_state.meals:
 
                         if saved_meal["id"] == meal["id"]:
@@ -680,13 +718,11 @@ def User_dashboard():
                             saved_meal["quantity"] -= 1
                             break
 
-                    # Save both orders and meals
                     database["orders"] = st.session_state.orders
                     database["meals"] = st.session_state.meals
 
                     save_database(database)
 
-                    # Increase next order ID
                     st.session_state.next_order_id += 1
 
                     st.success(
@@ -730,47 +766,122 @@ def User_dashboard():
             with st.container(border=True):
 
                 st.markdown(
-                    f"### 🧾 Order #{order['id']:03d}"
+                    f"### 🧾 Order #{order.get('id', 0):03d}"
                 )
 
                 st.write(
-                    f"🍱 **Meal:** {order['meal']}"
+                    f"🍱 **Meal:** {order.get('meal', 'Unknown')}"
                 )
 
                 st.write(
-                    f"👨‍🍳 **Cook:** {order['cook']}"
+                    f"👨‍🍳 **Cook:** {order.get('cook', 'Unknown')}"
                 )
 
                 st.write(
-                    f"💰 **Price:** ₹{order['price']}"
+                    f"💰 **Price:** ₹{order.get('price', 0)}"
                 )
 
                 st.write(
-                    f"📍 **Status:** {order['status']}"
+                    f"📍 **Status:** {order.get('status', 'Placed')}"
                 )
-            # =========================================
-            # ⭐ RATING GOES HERE
-            # =========================================
 
-            if order["status"] == "Completed":
+                # =============================================
+                # RATING
+                # =============================================
 
-                if order.get("rating") is None:
+                if order.get("status") == "Completed":
 
-                    st.markdown("### ⭐ Rate Your Cook")
+                    if order.get("rating") is None:
 
-                    rating = st.radio(
-                        "How was your experience?",
-                        [1, 2, 3, 4, 5],
-                        format_func=lambda x: "⭐" * x,
-                        horizontal=True,
-                        key=f"rating_{order['id']}"
-                    )
+                        st.markdown("### ⭐ Rate Your Cook")
 
-                    if st.button(
-                        "⭐ Submit Rating",
-                        key=f"submit_rating_{order['id']}",
-                        use_container_width=True
-                    ):
+                        rating = st.radio(
+                            "How was your experience?",
+                            [1, 2, 3, 4, 5],
+                            format_func=lambda x: "⭐" * x,
+                            horizontal=True,
+                            key=f"rating_{order['id']}"
+                        )
+
+                        if st.button(
+                            "⭐ Submit Rating",
+                            key=f"submit_rating_{order['id']}",
+                            use_container_width=True
+                        ):
+
+                            # Save rating to order
+                            for saved_order in st.session_state.orders:
+
+                                if (
+                                    saved_order["id"]
+                                    == order["id"]
+                                ):
+
+                                    saved_order["rating"] = rating
+                                    break
+
+                            # Find cook and update rating
+                            cook_found = False
+
+                            for cook in database["cooks"]:
+
+                                if (
+                                    cook.get("name", "").lower()
+                                    == order.get("cook", "").lower()
+                                ):
+
+                                    if "ratings" not in cook:
+                                        cook["ratings"] = []
+
+                                    cook["ratings"].append(rating)
+
+                                    cook["rating_count"] = len(
+                                        cook["ratings"]
+                                    )
+
+                                    cook["rating"] = round(
+                                        sum(cook["ratings"])
+                                        / len(cook["ratings"]),
+                                        1
+                                    )
+
+                                    cook_found = True
+                                    break
+
+                            # If cook does not exist, create one
+                            if not cook_found:
+
+                                database["cooks"].append(
+                                    {
+                                        "name": order.get(
+                                            "cook",
+                                            "Unknown Cook"
+                                        ),
+                                        "location": "",
+                                        "ratings": [rating],
+                                        "rating": float(rating),
+                                        "rating_count": 1
+                                    }
+                                )
+
+                            database["orders"] = (
+                                st.session_state.orders
+                            )
+
+                            save_database(database)
+
+                            st.success(
+                                "⭐ Thank you! Your rating has been submitted."
+                            )
+
+                            st.rerun()
+
+                    else:
+
+                        st.success(
+                            f"⭐ You rated this cook "
+                            f"{order['rating']}/5"
+                        )
 
 
 # =========================================================
@@ -836,7 +947,7 @@ def cook_dashboard():
             database["cooks"].append(
                 {
                     "name": cook_name.strip(),
-                    "location": location
+                    "location": location,
                     "ratings": [],
                     "rating": 5.0,
                     "rating_count": 0
@@ -886,7 +997,7 @@ def cook_dashboard():
     total_orders = len(cook_orders)
 
     earnings = sum(
-        order["price"]
+        order.get("price", 0)
         for order in cook_orders
         if order.get("status") in [
             "Accepted",
@@ -999,6 +1110,7 @@ def cook_dashboard():
             )
 
             database["meals"] = st.session_state.meals
+
             save_database(database)
 
             st.session_state.next_meal_id += 1
@@ -1017,7 +1129,6 @@ def cook_dashboard():
 
     st.subheader("🍽️ My Added Meals")
 
-    # Recalculate meals after adding
     my_meals = []
 
     for meal in st.session_state.meals:
@@ -1049,7 +1160,7 @@ def cook_dashboard():
                 with col1:
 
                     st.markdown(
-                        f"### 🍱 {meal['name']}"
+                        f"### 🍱 {meal.get('name', 'Meal')}"
                     )
 
                     st.write(
@@ -1059,13 +1170,13 @@ def cook_dashboard():
                 with col2:
 
                     st.write(
-                        f"💰 ₹{meal['price']}"
+                        f"💰 ₹{meal.get('price', 0)}"
                     )
 
                 with col3:
 
                     st.write(
-                        f"📦 {meal['quantity']}"
+                        f"📦 {meal.get('quantity', 0)}"
                     )
 
     st.divider()
@@ -1076,7 +1187,6 @@ def cook_dashboard():
 
     st.subheader("📦 Recent Orders")
 
-    # Recalculate orders
     cook_orders = []
 
     for order in st.session_state.orders:
@@ -1108,32 +1218,36 @@ def cook_dashboard():
                 with col1:
 
                     st.markdown(
-                        f"### 🧾 Order #{order['id']:03d}"
+                        f"### 🧾 Order #{order.get('id', 0):03d}"
                     )
 
                     st.write(
-                        f"🍱 **Meal:** {order['meal']}"
+                        f"🍱 **Meal:** "
+                        f"{order.get('meal', 'Unknown')}"
                     )
 
                     st.write(
-                        f"👤 **User:** {order['customer']}"
+                        f"👤 **User:** "
+                        f"{order.get('customer', 'User')}"
                     )
 
                     st.write(
-                        f"💰 **Price:** ₹{order['price']}"
+                        f"💰 **Price:** "
+                        f"₹{order.get('price', 0)}"
                     )
 
                     st.write(
-                        f"📍 **Status:** {order['status']}"
+                        f"📍 **Status:** "
+                        f"{order.get('status', 'Placed')}"
                     )
 
                 with col2:
 
-                    # -------------------------------------------------
+                    # =================================================
                     # ACCEPT ORDER
-                    # -------------------------------------------------
+                    # =================================================
 
-                    if order["status"] == "Placed":
+                    if order.get("status") == "Placed":
 
                         if st.button(
                             "✅ Accept",
@@ -1163,11 +1277,11 @@ def cook_dashboard():
 
                             st.rerun()
 
-                    # -------------------------------------------------
+                    # =================================================
                     # COMPLETE ORDER
-                    # -------------------------------------------------
+                    # =================================================
 
-                    elif order["status"] == "Accepted":
+                    elif order.get("status") == "Accepted":
 
                         if st.button(
                             "🎉 Complete",
@@ -1197,9 +1311,9 @@ def cook_dashboard():
 
                             st.rerun()
 
-                    # -------------------------------------------------
+                    # =================================================
                     # COMPLETED
-                    # -------------------------------------------------
+                    # =================================================
 
                     else:
 
