@@ -879,7 +879,7 @@ else:
                                 "Order accepted!"
                             )
 
-                            st.rerun()
+                        st.rerun()
 
                     elif order["status"] == "Accepted":
 
