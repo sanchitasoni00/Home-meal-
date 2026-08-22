@@ -673,29 +673,24 @@ customers = len(
 
 col1, col2, col3, col4 = st.columns(4)
 
-    with col1:
-
-        st.metric(
+with col1: 
+    st.metric(
             "🍱 Orders",
             total_orders
         )
-
-    with col2:
-
-        st.metric(
+ with col2:
+     st.metric(
             "💰 Earnings",
             f"₹{earnings}"
         )
 
-    with col3:
-
-        st.metric(
+with col3:
+    st.metric(
             "🍽️ Meals",
             total_meals
         )
 
     with col4:
-
         st.metric(
             "👥 Customers",
             customers
@@ -714,20 +709,18 @@ col1, col2, col3, col4 = st.columns(4)
         placeholder="Example: Rajma Chawal"
     )
 
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-    with col1:
-
-        price = st.number_input(
+with col1:
+    price = st.number_input(
             "Price (₹)",
             min_value=1,
             max_value=1000,
             value=50
         )
 
-    with col2:
-
-        quantity = st.number_input(
+with col2:
+    quantity = st.number_input(
             "Available Quantity",
             min_value=1,
             max_value=100,
