@@ -440,8 +440,7 @@ if not available_meals:
             "No meals found. Try another search."
         )
 
-    else:
-
+else:
         columns = st.columns(3)
 
         for index, meal in enumerate(available_meals):
