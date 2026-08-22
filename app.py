@@ -664,7 +664,7 @@ earnings = sum(
 
 total_meals = len(my_meals)
 
-    customers = len(
+customers = len(
         set(
             order["customer"]
             for order in cook_orders
