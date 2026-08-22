@@ -2,51 +2,7 @@ import streamlit as st
 import json
 import os
 
-# =========================================================
-# JSON DATABASE
-# =========================================================
 
-DATABASE_FILE = "database.json"
-
-
-def load_database():
-    default_database = {
-            "users": [ ],
-            "cooks": [ ],
-            "meals": [ ],
-            "orders": [ ]
-        }
-if not os.path.exists(DATABASE_FILE):
-        with open(DATABASE_FILE, "w", encoding="utf-8") as file:
-            json.dump(default_database, file, indent=4)
-            return default_database
-            try:
-     with open(DATABASE_FILE, "r", encoding="utf-8") as file:
-            database = json.load(file)
-except (json.JSONDecodeError, ValueError):
-    database = default_database
-    with open(DATABASE_FILE, "w" , encoding= "utf-8") as file:
-        json.dump(database, file, indent = 4)
-    database.setdefault("users", [])
-    database.setdefault("cooks", [])
-    database.setdefault("meals", [])
-    database.setdefault("orders", [])
-
-    return database
-
-
-def save_database(database):
-
-    with open(DATABASE_FILE, "w", encoding="utf-8") as file:
-        json.dump(
-            database,
-            file,
-            indent=4,
-            ensure_ascii=False
-        )
-
-
-database = load_database()
 # =========================================================
 # PAGE CONFIGURATION
 # =========================================================
@@ -57,12 +13,90 @@ st.set_page_config(
     layout="wide"
 )
 
+
+# =========================================================
+# JSON DATABASE
+# =========================================================
+
+DATABASE_FILE = "database.json"
+
+
+def load_database():
+    """Load database from JSON file."""
+
+    default_database = {
+        "users": [],
+        "cooks": [],
+        "meals": [],
+        "orders": []
+    }
+
+    # Create database if it does not exist
+    if not os.path.exists(DATABASE_FILE):
+        with open(DATABASE_FILE, "w", encoding="utf-8") as file:
+            json.dump(
+                default_database,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+        return default_database
+
+    # Try reading existing database
+    try:
+        with open(DATABASE_FILE, "r", encoding="utf-8") as file:
+            database = json.load(file)
+
+    except (json.JSONDecodeError, ValueError, OSError):
+        database = default_database
+
+        with open(DATABASE_FILE, "w", encoding="utf-8") as file:
+            json.dump(
+                database,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+        return database
+
+    # Make sure all required keys exist
+    database.setdefault("users", [])
+    database.setdefault("cooks", [])
+    database.setdefault("meals", [])
+    database.setdefault("orders", [])
+
+    return database
+
+
+def save_database(database):
+    """Save database to JSON file."""
+
+    with open(DATABASE_FILE, "w", encoding="utf-8") as file:
+        json.dump(
+            database,
+            file,
+            indent=4,
+            ensure_ascii=False
+        )
+
+
+# Load database
+database = load_database()
+
+
 # =========================================================
 # SESSION STATE
 # =========================================================
 
 if "page" not in st.session_state:
     st.session_state.page = "home"
+
+
+# ---------------------------------------------------------
+# Meals
+# ---------------------------------------------------------
 
 if "meals" not in st.session_state:
 
@@ -102,19 +136,63 @@ if "meals" not in st.session_state:
         database["meals"] = st.session_state.meals
         save_database(database)
 
-     
+
+# ---------------------------------------------------------
+# Orders
+# ---------------------------------------------------------
 
 if "orders" not in st.session_state:
     st.session_state.orders = database["orders"]
 
+
+# ---------------------------------------------------------
+# Find next meal ID
+# ---------------------------------------------------------
+
 if "next_meal_id" not in st.session_state:
-    st.session_state.next_meal_id = 4
+
+    if st.session_state.meals:
+
+        st.session_state.next_meal_id = (
+            max(
+                meal.get("id", 0)
+                for meal in st.session_state.meals
+            ) + 1
+        )
+
+    else:
+
+        st.session_state.next_meal_id = 1
+
+
+# ---------------------------------------------------------
+# Find next order ID
+# ---------------------------------------------------------
 
 if "next_order_id" not in st.session_state:
-    st.session_state.next_order_id = 1
+
+    if st.session_state.orders:
+
+        st.session_state.next_order_id = (
+            max(
+                order.get("id", 0)
+                for order in st.session_state.orders
+            ) + 1
+        )
+
+    else:
+
+        st.session_state.next_order_id = 1
+
+
+# ---------------------------------------------------------
+# Cook name
+# ---------------------------------------------------------
 
 if "cook_name" not in st.session_state:
     st.session_state.cook_name = ""
+
+
 # =========================================================
 # FIX OLD MEAL DATA
 # =========================================================
@@ -124,9 +202,22 @@ for meal in st.session_state.meals:
     if "quantity" not in meal:
         meal["quantity"] = 10
 
-    if "id" not in meal:
-        meal["id"] = st.session_state.next_meal_id
-        st.session_state.next_meal_id += 1
+    if "rating" not in meal:
+        meal["rating"] = 5.0
+
+    if "price" not in meal:
+        meal["price"] = 50
+
+    if "cook" not in meal:
+        meal["cook"] = "Unknown Cook"
+
+    if "name" not in meal:
+        meal["name"] = "Unnamed Meal"
+
+
+# Save corrected old data
+database["meals"] = st.session_state.meals
+save_database(database)
 
 
 # =========================================================
@@ -141,73 +232,96 @@ def go_to(page):
 # CUSTOM CSS
 # =========================================================
 
-st.html("""
-<style>
+st.html(
+    """
+    <style>
 
-.hero {
-    text-align: center;
-    padding: 35px 20px 25px 20px;
-}
+    .hero {
+        text-align: center;
+        padding: 35px 20px 25px 20px;
+    }
 
-.hero-icon {
-    font-size: 65px;
-}
+    .hero-icon {
+        font-size: 65px;
+    }
 
-.hero-title {
-    font-size: 48px;
-    font-weight: 800;
-    margin: 10px 0;
-    background: linear-gradient(
-        90deg,
-        #166534,
-        #22c55e,
-        #15803d
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    .hero-title {
+        font-size: 48px;
+        font-weight: 800;
+        margin: 10px 0;
 
-.hero-tagline {
-    font-size: 21px;
-    font-weight: 600;
-    color: #6b7280;
-}
+        background: linear-gradient(
+            90deg,
+            #166534,
+            #22c55e,
+            #15803d
+        );
 
-.hero-description {
-    font-size: 16px;
-    color: #6b7280;
-    max-width: 750px;
-    margin: auto;
-    line-height: 1.6;
-}
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-.feature-card {
-    background: #eafff0;
-    padding: 25px;
-    border-radius: 20px;
-    text-align: center;
-    border: 2px solid #86efac;
-    min-height: 180px;
-    color: #14532d;
-}
+    .hero-tagline {
+        font-size: 21px;
+        font-weight: 600;
+        color: #6b7280;
+    }
 
-.feature-card h3 {
-    color: #14532d !important;
-    font-size: 24px;
-    margin-top: 10px;
-}
+    .hero-description {
+        font-size: 16px;
+        color: #6b7280;
+        max-width: 750px;
+        margin: auto;
+        line-height: 1.6;
+    }
 
-.feature-card p {
-    color: #166534 !important;
-    font-size: 16px;
-}
+    .feature-card {
+        background: #eafff0;
+        padding: 25px;
+        border-radius: 20px;
+        text-align: center;
+        border: 2px solid #86efac;
+        min-height: 180px;
+        color: #14532d;
+    }
 
-.feature-icon {
-    font-size: 45px;
-}
+    .feature-card h3 {
+        color: #14532d !important;
+        font-size: 24px;
+        margin-top: 10px;
+    }
 
-</style>
-""")
+    .feature-card p {
+        color: #166534 !important;
+        font-size: 16px;
+    }
+
+    .feature-icon {
+        font-size: 45px;
+    }
+
+    .meal-card {
+        background: #f0fdf4;
+        border: 2px solid #bbf7d0;
+        border-radius: 18px;
+        padding: 20px;
+        margin-bottom: 12px;
+        min-height: 220px;
+    }
+
+    .meal-card h3 {
+        color: #166534;
+        margin-bottom: 12px;
+    }
+
+    .meal-card p {
+        color: #374151;
+        margin: 7px 0;
+    }
+
+    </style>
+    """
+)
 
 
 # =========================================================
@@ -216,29 +330,31 @@ st.html("""
 
 def home_page():
 
-    st.html("""
-    <div class="hero">
+    st.html(
+        """
+        <div class="hero">
 
-        <div class="hero-icon">
-            🍱
+            <div class="hero-icon">
+                🍱
+            </div>
+
+            <div class="hero-title">
+                Ghar Ka Khana, Ghar Se Khamai
+            </div>
+
+            <div class="hero-tagline">
+                Fresh • Affordable • Home-Cooked
+            </div>
+
+            <div class="hero-description">
+                Discover delicious homemade meals from trusted
+                local cooks, made with care and designed to fit
+                your budget.
+            </div>
+
         </div>
-
-        <div class="hero-title">
-            Ghar Ka Khana, Ghar Se Khamai
-        </div>
-
-        <div class="hero-tagline">
-            Fresh • Affordable • Home-Cooked
-        </div>
-
-        <div class="hero-description">
-            Discover delicious homemade meals from trusted
-            local cooks, made with care and designed to fit
-            your budget.
-        </div>
-
-    </div>
-    """)
+        """
+    )
 
     st.divider()
 
@@ -250,51 +366,57 @@ def home_page():
 
     with col1:
 
-        st.html("""
-        <div class="feature-card">
+        st.html(
+            """
+            <div class="feature-card">
 
-            <div class="feature-icon">💰</div>
+                <div class="feature-icon">💰</div>
 
-            <h3>Affordable</h3>
+                <h3>Affordable</h3>
 
-            <p>
-                Find delicious meals that fit your budget.
-            </p>
+                <p>
+                    Find delicious meals that fit your budget.
+                </p>
 
-        </div>
-        """)
+            </div>
+            """
+        )
 
     with col2:
 
-        st.html("""
-        <div class="feature-card">
+        st.html(
+            """
+            <div class="feature-card">
 
-            <div class="feature-icon">🏠</div>
+                <div class="feature-icon">🏠</div>
 
-            <h3>Home-Cooked</h3>
+                <h3>Home-Cooked</h3>
 
-            <p>
-                Fresh meals prepared by local home cooks.
-            </p>
+                <p>
+                    Fresh meals prepared by local home cooks.
+                </p>
 
-        </div>
-        """)
+            </div>
+            """
+        )
 
     with col3:
 
-        st.html("""
-        <div class="feature-card">
+        st.html(
+            """
+            <div class="feature-card">
 
-            <div class="feature-icon">❤️</div>
+                <div class="feature-icon">❤️</div>
 
-            <h3>Trusted</h3>
+                <h3>Trusted</h3>
 
-            <p>
-                Connect with reliable local cooks.
-            </p>
+                <p>
+                    Connect with reliable local cooks.
+                </p>
 
-        </div>
-        """)
+            </div>
+            """
+        )
 
     st.divider()
 
@@ -391,55 +513,78 @@ def User_dashboard():
                 "Above ₹150"
             ]
         )
-if user_name.strip():
-    existing_user = None
-for user in database ["users"]:
-    if users["name"].lower() == user_name.strip.lower():
-        existing_user = user
-        break
-    if existing_user:
-        existing_user["budget"] = budget
-    else:
-        database["users"].append(
-            {
-                "name": user_name.strip(),
-                "budget":budget
-            }
-        )
-save_database(database)
-st.divider()
+
+    # Save user profile
+    if user_name.strip():
+
+        existing_user = None
+
+        for user in database["users"]:
+
+            if (
+                user.get("name", "").lower()
+                == user_name.strip().lower()
+            ):
+
+                existing_user = user
+                break
+
+        if existing_user:
+
+            existing_user["budget"] = budget
+
+        else:
+
+            database["users"].append(
+                {
+                    "name": user_name.strip(),
+                    "budget": budget
+                }
+            )
+
+        save_database(database)
+
+    st.divider()
 
     # =====================================================
     # AVAILABLE MEALS
     # =====================================================
 
-st.subheader("🍱 Available Home-Cooked Meals")
+    st.subheader("🍱 Available Home-Cooked Meals")
 
-search = st.text_input(
+    search = st.text_input(
         "🔎 Search meals or cooks",
         placeholder="Example: Rajma, Thali, Priya..."
     )
 
-available_meals = []
+    available_meals = []
 
-for meal in st.session_state.meals:
+    for meal in st.session_state.meals:
 
-        if meal["quantity"] > 0:
+        # Make sure quantity exists
+        quantity = meal.get("quantity", 0)
+
+        if quantity > 0:
+
+            meal_name = meal.get("name", "")
+            cook_name = meal.get("cook", "")
 
             if (
                 not search
-                or search.lower() in meal["name"].lower()
-                or search.lower() in meal["cook"].lower()
+                or search.lower() in meal_name.lower()
+                or search.lower() in cook_name.lower()
             ):
 
                 available_meals.append(meal)
 
-if not available_meals:
+    if not available_meals:
+
         st.warning(
             "No meals found. Try another search."
         )
 
-else:
+    else:
+
         columns = st.columns(3)
 
         for index, meal in enumerate(available_meals):
@@ -450,15 +595,23 @@ else:
                     f"""
                     <div class="meal-card">
 
-                    <h3>🍱 {meal["name"]}</h3>
+                        <h3>🍱 {meal["name"]}</h3>
 
-                    <p>👨‍🍳 Cook: {meal["cook"]}</p>
+                        <p>
+                            👨‍🍳 <b>Cook:</b> {meal["cook"]}
+                        </p>
 
-                    <p>⭐ {meal["rating"]}/5</p>
+                        <p>
+                            ⭐ <b>Rating:</b> {meal.get("rating", 5.0)}/5
+                        </p>
 
-                    <p>💰 ₹{meal["price"]}</p>
+                        <p>
+                            💰 <b>Price:</b> ₹{meal["price"]}
+                        </p>
 
-                    <p>📦 Available: {meal["quantity"]}</p>
+                        <p>
+                            📦 <b>Available:</b> {meal["quantity"]}
+                        </p>
 
                     </div>
                     """,
@@ -477,6 +630,7 @@ else:
                         else "User"
                     )
 
+                    # Create new order
                     new_order = {
                         "id": st.session_state.next_order_id,
                         "meal": meal["name"],
@@ -486,14 +640,12 @@ else:
                         "status": "Placed"
                     }
 
+                    # Add order
                     st.session_state.orders.append(
                         new_order
                     )
-                    database["orders"] = st.session_state.orders
-                    save_database(database)
-                    
 
-                    # Reduce meal quantity
+                    # Reduce quantity
                     for saved_meal in st.session_state.meals:
 
                         if saved_meal["id"] == meal["id"]:
@@ -501,6 +653,13 @@ else:
                             saved_meal["quantity"] -= 1
                             break
 
+                    # Save both orders and meals
+                    database["orders"] = st.session_state.orders
+                    database["meals"] = st.session_state.meals
+
+                    save_database(database)
+
+                    # Increase next order ID
                     st.session_state.next_order_id += 1
 
                     st.success(
@@ -508,37 +667,40 @@ else:
                     )
 
                     st.rerun()
-st.divider()
+
+    st.divider()
 
     # =====================================================
     # MY ORDERS
     # =====================================================
 
-st.subheader("📦 My Orders")
+    st.subheader("📦 My Orders")
 
-current_user = (
+    current_user = (
         user_name.strip()
         if user_name.strip()
         else "User"
     )
 
-my_orders = []
+    my_orders = []
 
-for order in st.session_state.orders:
+    for order in st.session_state.orders:
 
-        if order["customer"] == current_user:
+        if order.get("customer", "") == current_user:
 
             my_orders.append(order)
 
-if not my_orders:
+    if not my_orders:
 
         st.info(
             "No orders yet. Start exploring meals!"
         )
 
-else:
-       for order in reversed(my_orders):
-           with st.container(border=True):
+    else:
+
+        for order in reversed(my_orders):
+
+            with st.container(border=True):
 
                 st.markdown(
                     f"### 🧾 Order #{order['id']:03d}"
@@ -599,127 +761,152 @@ def cook_dashboard():
         "Location",
         placeholder="Enter your area"
     )
-if cook_name.strip():
-    existing_cook = None
-    for cook in database["cooks"]:
-        if cook["name"].lower() == cook_name.strip().lower():
-            existing_cook = cook
-            break
-if existing_cook:
-    existing_cook["location"] = location
-else:
-      database["cooks"].append(
-          {
-              "name" : cook_name.strip() ,
-              "location" : location
-          }
-      )
-save_database(database)
 
-st.divider()
+    # Save cook profile
+    if cook_name.strip():
+
+        existing_cook = None
+
+        for cook in database["cooks"]:
+
+            if (
+                cook.get("name", "").lower()
+                == cook_name.strip().lower()
+            ):
+
+                existing_cook = cook
+                break
+
+        if existing_cook:
+
+            existing_cook["location"] = location
+
+        else:
+
+            database["cooks"].append(
+                {
+                    "name": cook_name.strip(),
+                    "location": location
+                }
+            )
+
+        save_database(database)
+
+    st.divider()
 
     # =====================================================
     # COOK ORDERS
     # =====================================================
 
-cook_orders = []
+    cook_orders = []
 
-for order in st.session_state.orders:
-            if (
+    for order in st.session_state.orders:
+
+        if (
             not cook_name.strip()
-            or order["cook"].lower()
+            or order.get("cook", "").lower()
             == cook_name.strip().lower()
         ):
-                   cook_orders.append(order)
+
+            cook_orders.append(order)
 
     # =====================================================
     # MY MEALS
     # =====================================================
 
-my_meals = []
+    my_meals = []
 
-for meal in st.session_state.meals:
-            if (
+    for meal in st.session_state.meals:
+
+        if (
             not cook_name.strip()
-            or meal["cook"].lower()
+            or meal.get("cook", "").lower()
             == cook_name.strip().lower()
         ):
-                 my_meals.append(meal)
+
+            my_meals.append(meal)
 
     # =====================================================
     # STATISTICS
     # =====================================================
 
-total_orders = len(cook_orders)
+    total_orders = len(cook_orders)
 
-earnings = sum(
+    earnings = sum(
         order["price"]
         for order in cook_orders
-        if order["status"] in [
+        if order.get("status") in [
             "Accepted",
             "Completed"
         ]
     )
 
-total_meals = len(my_meals)
+    total_meals = len(my_meals)
 
-customers = len(
+    customers = len(
         set(
-            order["customer"]
+            order.get("customer", "User")
             for order in cook_orders
         )
     )
 
-col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4 = st.columns(4)
 
-with col1: 
-    st.metric(
+    with col1:
+
+        st.metric(
             "🍱 Orders",
             total_orders
         )
-with col2:
-    st.metric(
+
+    with col2:
+
+        st.metric(
             "💰 Earnings",
             f"₹{earnings}"
         )
 
-with col3:
-    st.metric(
+    with col3:
+
+        st.metric(
             "🍽️ Meals",
             total_meals
         )
 
-with col4:
-    st.metric(
+    with col4:
+
+        st.metric(
             "👥 Customers",
             customers
         )
 
-st.divider()
+    st.divider()
 
     # =====================================================
     # ADD MEAL
     # =====================================================
 
-st.subheader("🍱 Add a Meal")
+    st.subheader("🍱 Add a Meal")
 
-meal_name = st.text_input(
+    meal_name = st.text_input(
         "Meal Name",
         placeholder="Example: Rajma Chawal"
     )
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    price = st.number_input(
+    with col1:
+
+        price = st.number_input(
             "Price (₹)",
             min_value=1,
             max_value=1000,
             value=50
         )
 
-with col2:
-    quantity = st.number_input(
+    with col2:
+
+        quantity = st.number_input(
             "Available Quantity",
             min_value=1,
             max_value=100,
@@ -757,6 +944,7 @@ with col2:
             st.session_state.meals.append(
                 new_meal
             )
+
             database["meals"] = st.session_state.meals
             save_database(database)
 
@@ -768,22 +956,39 @@ with col2:
 
             st.rerun()
 
-st.divider()
+    st.divider()
 
     # =====================================================
     # MY ADDED MEALS
     # =====================================================
 
-st.subheader("🍽️ My Added Meals")
+    st.subheader("🍽️ My Added Meals")
 
-if not my_meals:
-            st.info(
+    # Recalculate meals after adding
+    my_meals = []
+
+    for meal in st.session_state.meals:
+
+        if (
+            not cook_name.strip()
+            or meal.get("cook", "").lower()
+            == cook_name.strip().lower()
+        ):
+
+            my_meals.append(meal)
+
+    if not my_meals:
+
+        st.info(
             "You haven't added any meals yet."
         )
 
-else:
+    else:
+
         for meal in my_meals:
+
             with st.container(border=True):
+
                 col1, col2, col3 = st.columns(
                     [3, 1, 1]
                 )
@@ -795,7 +1000,7 @@ else:
                     )
 
                     st.write(
-                        f"⭐ {meal['rating']}/5"
+                        f"⭐ {meal.get('rating', 5.0)}/5"
                     )
 
                 with col2:
@@ -810,22 +1015,39 @@ else:
                         f"📦 {meal['quantity']}"
                     )
 
-st.divider()
+    st.divider()
 
     # =====================================================
     # RECENT ORDERS
     # =====================================================
 
-st.subheader("📦 Recent Orders")
+    st.subheader("📦 Recent Orders")
 
-if not cook_orders:
-    st.info(
+    # Recalculate orders
+    cook_orders = []
+
+    for order in st.session_state.orders:
+
+        if (
+            not cook_name.strip()
+            or order.get("cook", "").lower()
+            == cook_name.strip().lower()
+        ):
+
+            cook_orders.append(order)
+
+    if not cook_orders:
+
+        st.info(
             "No orders have been placed yet."
         )
 
-else:
+    else:
+
         for order in reversed(cook_orders):
+
             with st.container(border=True):
+
                 col1, col2 = st.columns(
                     [4, 1]
                 )
@@ -854,6 +1076,10 @@ else:
 
                 with col2:
 
+                    # -------------------------------------------------
+                    # ACCEPT ORDER
+                    # -------------------------------------------------
+
                     if order["status"] == "Placed":
 
                         if st.button(
@@ -869,16 +1095,24 @@ else:
                                     == order["id"]
                                 ):
 
-                                    saved_order[ "status"] = "Accepted"
-
+                                    saved_order["status"] = "Accepted"
                                     break
-                        database["orders"] = st.session_state.orders
-                        save_database(database)
-                        st.success(
+
+                            database["orders"] = (
+                                st.session_state.orders
+                            )
+
+                            save_database(database)
+
+                            st.success(
                                 "Order accepted!"
                             )
 
-                        st.rerun()
+                            st.rerun()
+
+                    # -------------------------------------------------
+                    # COMPLETE ORDER
+                    # -------------------------------------------------
 
                     elif order["status"] == "Accepted":
 
@@ -895,17 +1129,24 @@ else:
                                     == order["id"]
                                 ):
 
-                                    saved_order["status" ] = "Completed"
-
+                                    saved_order["status"] = "Completed"
                                     break
-                            database["orders"] = st.session_state.orders
+
+                            database["orders"] = (
+                                st.session_state.orders
+                            )
+
                             save_database(database)
 
                             st.success(
                                 "Order completed!"
                             )
 
-                        st.rerun()
+                            st.rerun()
+
+                    # -------------------------------------------------
+                    # COMPLETED
+                    # -------------------------------------------------
 
                     else:
 
@@ -929,6 +1170,3 @@ elif st.session_state.page == "User":
 elif st.session_state.page == "cook":
 
     cook_dashboard()
-    import streamlit as st
-from supabase import create_client
-
