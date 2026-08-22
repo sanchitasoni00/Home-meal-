@@ -625,10 +625,8 @@ st.divider()
 
 cook_orders = []
 
-    for order in st.session_state.orders:
-
-        
-        if (
+for order in st.session_state.orders:
+            if (
             not cook_name.strip()
             or order["cook"].lower()
             == cook_name.strip().lower()
