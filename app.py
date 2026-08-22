@@ -896,19 +896,17 @@ else:
                                     == order["id"]
                                 ):
 
-                                    saved_order[
-                                        "status"
-                                    ] = "Completed"
+                                    saved_order["status" ] = "Completed"
 
                                     break
-                             database["orders"] = st.session_state.orders
-                             save_database(database)
+                            database["orders"] = st.session_state.orders
+                            save_database(database)
 
                             st.success(
                                 "Order completed!"
                             )
 
-                            st.rerun()
+                        st.rerun()
 
                     else:
 
