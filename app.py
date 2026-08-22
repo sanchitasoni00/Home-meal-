@@ -782,7 +782,7 @@ if not my_meals:
             "You haven't added any meals yet."
         )
 
-    else:
+else:
         for meal in my_meals:
             with st.container(border=True):
                 col1, col2, col3 = st.columns(
