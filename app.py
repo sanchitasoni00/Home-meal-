@@ -523,9 +523,9 @@ current_user = (
         else "User"
     )
 
-my_orders = []
+  my_orders = []
 
-    for order in st.session_state.orders:
+for order in st.session_state.orders:
 
         if order["customer"] == current_user:
 
