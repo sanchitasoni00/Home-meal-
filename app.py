@@ -777,9 +777,8 @@ st.divider()
 
 st.subheader("🍽️ My Added Meals")
 
-    if not my_meals:
-
-        st.info(
+if not my_meals:
+            st.info(
             "You haven't added any meals yet."
         )
 
