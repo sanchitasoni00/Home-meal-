@@ -31,7 +31,6 @@ def load_database():
         "orders": []
     }
 
-    # Create database if it does not exist
     if not os.path.exists(DATABASE_FILE):
         with open(DATABASE_FILE, "w", encoding="utf-8") as file:
             json.dump(
@@ -43,12 +42,12 @@ def load_database():
 
         return default_database
 
-    # Try reading existing database
     try:
         with open(DATABASE_FILE, "r", encoding="utf-8") as file:
             database = json.load(file)
 
     except (json.JSONDecodeError, ValueError, OSError):
+
         database = default_database
 
         with open(DATABASE_FILE, "w", encoding="utf-8") as file:
@@ -61,7 +60,6 @@ def load_database():
 
         return database
 
-    # Make sure all required keys exist
     database.setdefault("users", [])
     database.setdefault("cooks", [])
     database.setdefault("meals", [])
@@ -82,7 +80,6 @@ def save_database(database):
         )
 
 
-# Load database
 database = load_database()
 
 
@@ -92,6 +89,9 @@ database = load_database()
 
 if "page" not in st.session_state:
     st.session_state.page = "home"
+
+if "cook_name" not in st.session_state:
+    st.session_state.cook_name = ""
 
 
 # =========================================================
@@ -186,14 +186,6 @@ if "next_order_id" not in st.session_state:
 
 
 # =========================================================
-# COOK NAME
-# =========================================================
-
-if "cook_name" not in st.session_state:
-    st.session_state.cook_name = ""
-
-
-# =========================================================
 # FIX OLD MEAL DATA
 # =========================================================
 
@@ -250,11 +242,11 @@ for order in st.session_state.orders:
         order["rating"] = None
 
 
-# Save corrected data
 database["meals"] = st.session_state.meals
 database["orders"] = st.session_state.orders
 
 save_database(database)
+
 
 # =========================================================
 # NAVIGATION
@@ -355,6 +347,43 @@ st.html(
         margin: 7px 0;
     }
 
+    .why-title {
+        text-align: center;
+        color: #166534;
+        font-size: 36px;
+        font-weight: 800;
+        margin-top: 20px;
+    }
+
+    .why-subtitle {
+        text-align: center;
+        color: #6b7280;
+        font-size: 17px;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(
+            135deg,
+            #166534,
+            #22c55e
+        );
+        padding: 30px;
+        border-radius: 22px;
+        color: white;
+        margin-bottom: 25px;
+    }
+
+    .dashboard-header h1 {
+        color: white !important;
+        margin-bottom: 8px;
+    }
+
+    .dashboard-header p {
+        color: #ecfdf5 !important;
+        font-size: 17px;
+    }
+
     </style>
     """
 )
@@ -365,6 +394,10 @@ st.html(
 # =========================================================
 
 def home_page():
+
+    # =====================================================
+    # HERO
+    # =====================================================
 
     st.html(
         """
@@ -457,7 +490,7 @@ def home_page():
     st.divider()
 
     # =====================================================
-    # CHOOSE ROLE
+    # GET STARTED
     # =====================================================
 
     st.markdown(
@@ -500,85 +533,99 @@ def home_page():
 
             go_to("cook")
             st.rerun()
-            
+
+    # =====================================================
+    # WHY HOME MEAL
+    # =====================================================
+
     st.divider()
 
-    st.markdown(
+    st.html(
         """
-        <h2 style="
-            text-align:center;
-            color:#166534;
-            margin-bottom:10px;
-        ">
+        <div class="why-title">
             💚 Why HomeMeal?
-        </h2>
+        </div>
 
-        <p style="
-            text-align:center;
-            color:#6b7280;
-            font-size:17px;
-            margin-bottom:30px;
-        ">
+        <div class="why-subtitle">
             Making everyday meals better, easier and more affordable.
-        </p>
-        """,
-        unsafe_allow_html=True
+        </div>
+        """
     )
 
     why1, why2, why3, why4 = st.columns(4)
 
     with why1:
+
         st.html(
             """
             <div class="feature-card">
+
                 <div class="feature-icon">🏠</div>
+
                 <h3>Home-Cooked</h3>
+
                 <p>
                     Enjoy fresh meals prepared with the
                     comfort and care of home cooking.
                 </p>
+
             </div>
             """
         )
 
     with why2:
+
         st.html(
             """
             <div class="feature-card">
+
                 <div class="feature-icon">💰</div>
+
                 <h3>Student-Friendly</h3>
+
                 <p>
                     Affordable meal options designed
                     for students and budget-conscious users.
                 </p>
+
             </div>
             """
         )
 
     with why3:
+
         st.html(
             """
             <div class="feature-card">
+
                 <div class="feature-icon">👩‍🍳</div>
+
                 <h3>Support Local Cooks</h3>
+
                 <p>
                     Help talented home cooks earn by
                     sharing their delicious meals.
                 </p>
+
             </div>
             """
         )
 
     with why4:
+
         st.html(
             """
             <div class="feature-card">
+
                 <div class="feature-icon">❤️</div>
-                <h3>Simple &amp; Trusted</h3>
+
+                <h3>Simple & Trusted</h3>
+
                 <p>
                     Discover, order and enjoy meals
                     through a simple and convenient platform.
                 </p>
+
             </div>
             """
         )
@@ -590,11 +637,19 @@ def home_page():
 
 def User_dashboard():
 
-    st.title("👤 User Dashboard")
+    st.html(
+        """
+        <div class="dashboard-header">
 
-    st.write(
-        "Welcome to HomeMeal! Discover fresh, affordable "
-        "and delicious home-cooked meals near you."
+            <h1>👤 User Dashboard</h1>
+
+            <p>
+                Discover fresh, affordable and delicious
+                home-cooked meals.
+            </p>
+
+        </div>
+        """
     )
 
     if st.button("⬅️ Back to Home"):
@@ -633,6 +688,7 @@ def User_dashboard():
         )
 
     # Save user profile
+
     if user_name.strip():
 
         existing_user = None
@@ -672,7 +728,7 @@ def User_dashboard():
 
     search = st.text_input(
         "🔎 Search meals or cooks",
-        placeholder="Example: Rajma, Thali, Priya..."
+        placeholder="Example: Rajma, Thali, Anjali..."
     )
 
     available_meals = []
@@ -734,11 +790,17 @@ def User_dashboard():
 
                         break
 
+                # =================================================
+                # MEAL CARD
+                # =================================================
+
                 st.html(
                     f"""
                     <div class="meal-card">
 
-                        <h3>🍱 {meal.get("name", "Meal")}</h3>
+                        <h3>
+                            🍱 {meal.get("name", "Meal")}
+                        </h3>
 
                         <p>
                             👨‍🍳 <b>Cook:</b>
@@ -791,12 +853,15 @@ def User_dashboard():
                         new_order
                     )
 
-                    # Reduce meal quantity
+                    # Reduce quantity
+
                     for saved_meal in st.session_state.meals:
 
                         if saved_meal["id"] == meal["id"]:
 
-                            saved_meal["quantity"] -= 1
+                            if saved_meal["quantity"] > 0:
+                                saved_meal["quantity"] -= 1
+
                             break
 
                     database["orders"] = st.session_state.orders
@@ -851,30 +916,36 @@ def User_dashboard():
                 )
 
                 st.write(
-                    f"🍱 **Meal:** {order.get('meal', 'Unknown')}"
+                    f"🍱 **Meal:** "
+                    f"{order.get('meal', 'Unknown')}"
                 )
 
                 st.write(
-                    f"👨‍🍳 **Cook:** {order.get('cook', 'Unknown')}"
+                    f"👨‍🍳 **Cook:** "
+                    f"{order.get('cook', 'Unknown')}"
                 )
 
                 st.write(
-                    f"💰 **Price:** ₹{order.get('price', 0)}"
+                    f"💰 **Price:** "
+                    f"₹{order.get('price', 0)}"
                 )
 
                 st.write(
-                    f"📍 **Status:** {order.get('status', 'Placed')}"
+                    f"📍 **Status:** "
+                    f"{order.get('status', 'Placed')}"
                 )
 
-                # =============================================
+                # =================================================
                 # RATING
-                # =============================================
+                # =================================================
 
                 if order.get("status") == "Completed":
 
                     if order.get("rating") is None:
 
-                        st.markdown("### ⭐ Rate Your Cook")
+                        st.markdown(
+                            "### ⭐ Rate Your Cook"
+                        )
 
                         rating = st.radio(
                             "How was your experience?",
@@ -891,6 +962,7 @@ def User_dashboard():
                         ):
 
                             # Save rating to order
+
                             for saved_order in st.session_state.orders:
 
                                 if (
@@ -901,7 +973,8 @@ def User_dashboard():
                                     saved_order["rating"] = rating
                                     break
 
-                            # Find cook and update rating
+                            # Find cook
+
                             cook_found = False
 
                             for cook in database["cooks"]:
@@ -914,7 +987,9 @@ def User_dashboard():
                                     if "ratings" not in cook:
                                         cook["ratings"] = []
 
-                                    cook["ratings"].append(rating)
+                                    cook["ratings"].append(
+                                        rating
+                                    )
 
                                     cook["rating_count"] = len(
                                         cook["ratings"]
@@ -929,7 +1004,8 @@ def User_dashboard():
                                     cook_found = True
                                     break
 
-                            # If cook does not exist, create one
+                            # Create cook if missing
+
                             if not cook_found:
 
                                 database["cooks"].append(
@@ -952,7 +1028,8 @@ def User_dashboard():
                             save_database(database)
 
                             st.success(
-                                "⭐ Thank you! Your rating has been submitted."
+                                "⭐ Thank you! "
+                                "Your rating has been submitted."
                             )
 
                             st.rerun()
@@ -971,10 +1048,19 @@ def User_dashboard():
 
 def cook_dashboard():
 
-    st.title("👨‍🍳 Home Cook Dashboard")
+    st.html(
+        """
+        <div class="dashboard-header">
 
-    st.write(
-        "Manage your meals, orders and earnings from one place."
+            <h1>👨‍🍳 Home Cook Dashboard</h1>
+
+            <p>
+                Manage your meals, orders and earnings
+                from one place.
+            </p>
+
+        </div>
+        """
     )
 
     if st.button("⬅️ Back to Home"):
@@ -1005,6 +1091,7 @@ def cook_dashboard():
     )
 
     # Save cook profile
+
     if cook_name.strip():
 
         existing_cook = None
@@ -1241,23 +1328,27 @@ def cook_dashboard():
                 with col1:
 
                     st.markdown(
-                        f"### 🍱 {meal.get('name', 'Meal')}"
+                        f"### 🍱 "
+                        f"{meal.get('name', 'Meal')}"
                     )
 
                     st.write(
-                        f"⭐ {meal.get('rating', 5.0)}/5"
+                        f"⭐ "
+                        f"{meal.get('rating', 5.0)}/5"
                     )
 
                 with col2:
 
                     st.write(
-                        f"💰 ₹{meal.get('price', 0)}"
+                        f"💰 ₹"
+                        f"{meal.get('price', 0)}"
                     )
 
                 with col3:
 
                     st.write(
-                        f"📦 {meal.get('quantity', 0)}"
+                        f"📦 "
+                        f"{meal.get('quantity', 0)}"
                     )
 
     st.divider()
@@ -1299,7 +1390,8 @@ def cook_dashboard():
                 with col1:
 
                     st.markdown(
-                        f"### 🧾 Order #{order.get('id', 0):03d}"
+                        f"### 🧾 "
+                        f"Order #{order.get('id', 0):03d}"
                     )
 
                     st.write(
@@ -1324,9 +1416,9 @@ def cook_dashboard():
 
                 with col2:
 
-                    # =================================================
+                    # =============================================
                     # ACCEPT ORDER
-                    # =================================================
+                    # =============================================
 
                     if order.get("status") == "Placed":
 
@@ -1358,9 +1450,9 @@ def cook_dashboard():
 
                             st.rerun()
 
-                    # =================================================
+                    # =============================================
                     # COMPLETE ORDER
-                    # =================================================
+                    # =============================================
 
                     elif order.get("status") == "Accepted":
 
@@ -1392,9 +1484,9 @@ def cook_dashboard():
 
                             st.rerun()
 
-                    # =================================================
+                    # =============================================
                     # COMPLETED
-                    # =================================================
+                    # =============================================
 
                     else:
 
