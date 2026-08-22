@@ -265,24 +265,48 @@ def go_to(page):
 # =========================================================
 # CUSTOM CSS
 # =========================================================
-
 st.html(
     """
     <style>
 
+    /* ==============================
+       GLOBAL
+    ============================== */
+
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+        max-width: 1200px;
+    }
+
+    /* ==============================
+       HERO
+    ============================== */
+
     .hero {
         text-align: center;
-        padding: 35px 20px 25px 20px;
+        padding: 55px 20px 45px 20px;
+        border-radius: 30px;
+        background:
+            linear-gradient(
+                135deg,
+                #f0fdf4,
+                #dcfce7,
+                #f7fee7
+            );
+        border: 1px solid #bbf7d0;
+        margin-bottom: 30px;
     }
 
     .hero-icon {
-        font-size: 65px;
+        font-size: 72px;
+        margin-bottom: 10px;
     }
 
     .hero-title {
-        font-size: 48px;
-        font-weight: 800;
-        margin: 10px 0;
+        font-size: 52px;
+        font-weight: 900;
+        margin: 5px 0 12px 0;
 
         background: linear-gradient(
             90deg,
@@ -296,51 +320,194 @@ st.html(
     }
 
     .hero-tagline {
-        font-size: 21px;
-        font-weight: 600;
-        color: #6b7280;
+        font-size: 23px;
+        font-weight: 700;
+        color: #166534;
+        margin-bottom: 12px;
     }
 
     .hero-description {
-        font-size: 16px;
-        color: #6b7280;
-        max-width: 750px;
+        font-size: 17px;
+        color: #4b5563;
+        max-width: 760px;
         margin: auto;
-        line-height: 1.6;
+        line-height: 1.7;
     }
 
+    /* ==============================
+       BADGES
+    ============================== */
+
+    .hero-badges {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+
+    .badge {
+        background: white;
+        color: #166534;
+        padding: 9px 16px;
+        border-radius: 30px;
+        border: 1px solid #bbf7d0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    /* ==============================
+       FEATURE CARDS
+    ============================== */
+
     .feature-card {
-        background: #eafff0;
-        padding: 25px;
-        border-radius: 20px;
+        background: linear-gradient(
+            145deg,
+            #f0fdf4,
+            #dcfce7
+        );
+
+        padding: 28px 22px;
+        border-radius: 22px;
         text-align: center;
-        border: 2px solid #86efac;
-        min-height: 180px;
-        color: #14532d;
+
+        border: 2px solid #bbf7d0;
+
+        min-height: 190px;
+
+        box-shadow:
+            0 8px 25px rgba(22, 101, 52, 0.08);
+
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-7px);
+
+        box-shadow:
+            0 15px 35px rgba(22, 101, 52, 0.16);
     }
 
     .feature-card h3 {
         color: #14532d !important;
-        font-size: 24px;
-        margin-top: 10px;
+        font-size: 22px;
+        margin-top: 12px;
+        margin-bottom: 10px;
     }
 
     .feature-card p {
         color: #166534 !important;
-        font-size: 16px;
+        font-size: 15px;
+        line-height: 1.6;
     }
 
     .feature-icon {
         font-size: 45px;
     }
 
+    /* ==============================
+       SECTION HEADINGS
+    ============================== */
+
+    .section-title {
+        text-align: center;
+        color: #166534;
+        font-size: 38px;
+        font-weight: 800;
+        margin-top: 25px;
+        margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        color: #6b7280;
+        font-size: 17px;
+        margin-bottom: 30px;
+    }
+
+    /* ==============================
+       HOW IT WORKS
+    ============================== */
+
+    .step-card {
+        text-align: center;
+        padding: 25px 15px;
+        background: white;
+        border-radius: 20px;
+        border: 2px solid #dcfce7;
+        min-height: 175px;
+
+        box-shadow:
+            0 5px 18px rgba(0,0,0,0.05);
+    }
+
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 45px;
+        height: 45px;
+
+        border-radius: 50%;
+
+        background: #166534;
+        color: white;
+
+        font-weight: 800;
+        font-size: 18px;
+
+        margin-bottom: 10px;
+    }
+
+    .step-card h3 {
+        color: #14532d;
+        font-size: 20px;
+        margin: 8px 0;
+    }
+
+    .step-card p {
+        color: #6b7280;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* ==============================
+       MEAL CARDS
+    ============================== */
+
     .meal-card {
-        background: #f0fdf4;
+        background: linear-gradient(
+            145deg,
+            #f0fdf4,
+            #ffffff
+        );
+
         border: 2px solid #bbf7d0;
-        border-radius: 18px;
-        padding: 20px;
+
+        border-radius: 20px;
+
+        padding: 22px;
+
         margin-bottom: 12px;
+
         min-height: 220px;
+
+        box-shadow:
+            0 7px 22px rgba(22, 101, 52, 0.07);
+
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+    .meal-card:hover {
+        transform: translateY(-5px);
+
+        box-shadow:
+            0 14px 30px rgba(22, 101, 52, 0.13);
     }
 
     .meal-card h3 {
@@ -353,6 +520,41 @@ st.html(
         margin: 7px 0;
     }
 
+    /* ==============================
+       TRUST BANNER
+    ============================== */
+
+    .trust-banner {
+        text-align: center;
+        background: linear-gradient(
+            90deg,
+            #166534,
+            #15803d
+        );
+
+        color: white;
+
+        padding: 28px;
+
+        border-radius: 22px;
+
+        margin-top: 30px;
+        margin-bottom: 30px;
+
+        box-shadow:
+            0 10px 25px rgba(22, 101, 52, 0.18);
+    }
+
+    .trust-banner h2 {
+        color: white;
+        margin-bottom: 8px;
+    }
+
+    .trust-banner p {
+        color: #dcfce7;
+        margin: 0;
+    }
+
     </style>
     """
 )
@@ -363,6 +565,10 @@ st.html(
 # =========================================================
 
 def home_page():
+
+    # =====================================================
+    # HERO SECTION
+    # =====================================================
 
     st.html(
         """
@@ -386,15 +592,46 @@ def home_page():
                 your budget.
             </div>
 
+            <div class="hero-badges">
+
+                <div class="badge">
+                    🏠 Homemade
+                </div>
+
+                <div class="badge">
+                    💰 Affordable
+                </div>
+
+                <div class="badge">
+                    ❤️ Trusted
+                </div>
+
+                <div class="badge">
+                    🌱 Fresh
+                </div>
+
+            </div>
+
         </div>
         """
     )
 
-    st.divider()
-
     # =====================================================
     # FEATURES
     # =====================================================
+
+    st.markdown(
+        """
+        <div class="section-title">
+            What Makes HomeMeal Special?
+        </div>
+
+        <div class="section-subtitle">
+            Good food, fair prices and the comfort of home.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     col1, col2, col3 = st.columns(3)
 
@@ -409,7 +646,8 @@ def home_page():
                 <h3>Affordable</h3>
 
                 <p>
-                    Find delicious meals that fit your budget.
+                    Delicious homemade meals that
+                    fit your everyday budget.
                 </p>
 
             </div>
@@ -427,7 +665,8 @@ def home_page():
                 <h3>Home-Cooked</h3>
 
                 <p>
-                    Fresh meals prepared by local home cooks.
+                    Fresh meals prepared by
+                    local home cooks with care.
                 </p>
 
             </div>
@@ -445,7 +684,8 @@ def home_page():
                 <h3>Trusted</h3>
 
                 <p>
-                    Connect with reliable local cooks.
+                    Ratings and reviews help you
+                    choose cooks with confidence.
                 </p>
 
             </div>
@@ -459,7 +699,15 @@ def home_page():
     # =====================================================
 
     st.markdown(
-        "<h2 style='text-align:center;'>🚀 Get Started</h2>",
+        """
+        <div class="section-title">
+            🚀 Get Started
+        </div>
+
+        <div class="section-subtitle">
+            Choose how you want to use HomeMeal.
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
@@ -472,8 +720,7 @@ def home_page():
     if user_type == "User":
 
         st.info(
-            "👤 Users can discover meals, compare cooks "
-            "and place orders."
+            "👤 Discover meals, compare cooks and place orders."
         )
 
         if st.button(
@@ -487,8 +734,7 @@ def home_page():
     else:
 
         st.info(
-            "👨‍🍳 Home cooks can add meals, view orders "
-            "and manage their food business."
+            "👨‍🍳 Add your meals, manage orders and grow your business."
         )
 
         if st.button(
@@ -505,32 +751,17 @@ def home_page():
 
     st.divider()
 
-    st.html(
+    st.markdown(
         """
-        <div style="
-            text-align:center;
-            padding:25px 10px 20px 10px;
-        ">
-
-            <h1 style="
-                color:#166534;
-                font-size:40px;
-                font-weight:800;
-                margin-bottom:8px;
-            ">
-                💚 Why HomeMeal?
-            </h1>
-
-            <p style="
-                color:#6b7280;
-                font-size:18px;
-                margin-top:0;
-            ">
-                More than just a meal — it's the taste of home.
-            </p>
-
+        <div class="section-title">
+            💚 Why HomeMeal?
         </div>
-        """
+
+        <div class="section-subtitle">
+            More than just a meal — it's the taste of home.
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     why1, why2, why3, why4 = st.columns(4)
@@ -546,8 +777,8 @@ def home_page():
                 <h3>Home-Cooked</h3>
 
                 <p>
-                    Enjoy fresh meals prepared with the
-                    comfort and care of home cooking.
+                    Enjoy the comfort and care
+                    of freshly prepared food.
                 </p>
 
             </div>
@@ -565,8 +796,8 @@ def home_page():
                 <h3>Student-Friendly</h3>
 
                 <p>
-                    Affordable meal options designed
-                    for students and budget-conscious users.
+                    Affordable meals designed
+                    for everyday budgets.
                 </p>
 
             </div>
@@ -584,8 +815,8 @@ def home_page():
                 <h3>Support Local Cooks</h3>
 
                 <p>
-                    Help talented home cooks earn by
-                    sharing their delicious meals.
+                    Help home cooks earn by
+                    sharing their delicious food.
                 </p>
 
             </div>
@@ -598,18 +829,144 @@ def home_page():
             """
             <div class="feature-card">
 
-                <div class="feature-icon">❤️</div>
+                <div class="feature-icon">⭐</div>
 
-                <h3>Simple & Trusted</h3>
+                <h3>Trusted Choices</h3>
 
                 <p>
-                    Discover, order and enjoy meals
-                    through a simple and convenient platform.
+                    Ratings help users discover
+                    reliable cooks and meals.
                 </p>
 
             </div>
             """
         )
+
+    # =====================================================
+    # HOW HOME MEAL WORKS
+    # =====================================================
+
+    st.divider()
+
+    st.markdown(
+        """
+        <div class="section-title">
+            ⚡ How HomeMeal Works
+        </div>
+
+        <div class="section-subtitle">
+            From craving to comfort in four simple steps.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    step1, step2, step3, step4 = st.columns(4)
+
+    with step1:
+
+        st.html(
+            """
+            <div class="step-card">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <h3>🔎 Find</h3>
+
+                <p>
+                    Explore homemade meals
+                    from local cooks.
+                </p>
+
+            </div>
+            """
+        )
+
+    with step2:
+
+        st.html(
+            """
+            <div class="step-card">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <h3>🛒 Order</h3>
+
+                <p>
+                    Choose your meal and
+                    place an order.
+                </p>
+
+            </div>
+            """
+        )
+
+    with step3:
+
+        st.html(
+            """
+            <div class="step-card">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <h3>👩‍🍳 Prepare</h3>
+
+                <p>
+                    Your local cook prepares
+                    your fresh meal.
+                </p>
+
+            </div>
+            """
+        )
+
+    with step4:
+
+        st.html(
+            """
+            <div class="step-card">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <h3>😋 Enjoy</h3>
+
+                <p>
+                    Enjoy your homemade meal
+                    and rate your experience.
+                </p>
+
+            </div>
+            """
+        )
+
+    # =====================================================
+    # TRUST BANNER
+    # =====================================================
+
+    st.html(
+        """
+        <div class="trust-banner">
+
+            <h2>
+                🍱 Bringing the Taste of Home Closer to You
+            </h2>
+
+            <p>
+                Connecting hungry users with talented
+                local home cooks.
+            </p>
+
+        </div>
+        """
+    )
 
 
 # =========================================================
