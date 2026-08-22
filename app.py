@@ -775,7 +775,7 @@ st.divider()
     # MY ADDED MEALS
     # =====================================================
 
-    st.subheader("🍽️ My Added Meals")
+st.subheader("🍽️ My Added Meals")
 
     if not my_meals:
 
