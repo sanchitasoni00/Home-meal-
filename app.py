@@ -256,7 +256,7 @@ database["orders"] = st.session_state.orders
 
 save_database(database)
 
-
+z
 # =========================================================
 # NAVIGATION
 # =========================================================
@@ -501,12 +501,16 @@ def home_page():
 
             go_to("cook")
             st.rerun()
-            st.markdown(
+            
+            st.divider()
+             st.markdown(
         """
         <h2 style="
             text-align:center;
             color:#166534;
             margin-bottom:10px;
+
+ 
         ">
             💚 Why HomeMeal?
         </h2>
