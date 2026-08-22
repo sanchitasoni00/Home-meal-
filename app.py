@@ -10,24 +10,24 @@ DATABASE_FILE = "database.json"
 
 
 def load_database():
-
-    if not os.path.exists(DATABASE_FILE):
-
-        database = {
-            "users": [],
-            "cooks": [],
-            "meals": [],
-            "orders": []
+    default-database = {
+            "users": [ ],
+            "cooks": [ ],
+            "meals": [ ],
+            "orders": [ ]
         }
-
+if not os.path.exists(DATABASE_FILE):
         with open(DATABASE_FILE, "w", encoding="utf-8") as file:
-            json.dump(database, file, indent=4)
+            json.dump(default_database, file, indent=4)
 
-        return database
-
+        return default_database
+try:
     with open(DATABASE_FILE, "r", encoding="utf-8") as file:
         database = json.load(file)
-
+except (json.JSONDecodeError, ValueError):
+    database = default_database
+    with open(DATABASE_FILE, "w" , encoding= "utf-8") as file:
+        json.dump(database, file, indent = 4)
     database.setdefault("users", [])
     database.setdefault("cooks", [])
     database.setdefault("meals", [])
