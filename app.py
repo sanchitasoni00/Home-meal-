@@ -637,17 +637,15 @@ for order in st.session_state.orders:
     # MY MEALS
     # =====================================================
 
-    my_meals = []
+my_meals = []
 
-    for meal in st.session_state.meals:
-
-        if (
+for meal in st.session_state.meals:
+            if (
             not cook_name.strip()
             or meal["cook"].lower()
             == cook_name.strip().lower()
         ):
-
-            my_meals.append(meal)
+                 my_meals.append(meal)
 
     # =====================================================
     # STATISTICS
