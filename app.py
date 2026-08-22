@@ -505,7 +505,7 @@ def home_page():
 
     st.divider()
 
-    st.markdown(
+    st.html(
         """
         <div style="
             text-align:center;
@@ -530,8 +530,7 @@ def home_page():
             </p>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
     why1, why2, why3, why4 = st.columns(4)
