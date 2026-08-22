@@ -10,7 +10,7 @@ DATABASE_FILE = "database.json"
 
 
 def load_database():
-    default-database = {
+    default_database = {
             "users": [ ],
             "cooks": [ ],
             "meals": [ ],
