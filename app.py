@@ -704,7 +704,7 @@ st.divider()
 
 st.subheader("🍱 Add a Meal")
 
-    meal_name = st.text_input(
+meal_name = st.text_input(
         "Meal Name",
         placeholder="Example: Rajma Chawal"
     )
