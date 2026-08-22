@@ -658,6 +658,293 @@ st.html(
     </style>
     """
 )
+    /* =========================================
+       USER DASHBOARD
+       ========================================= */
+
+    .dashboard-header {
+        background: linear-gradient(
+            135deg,
+            #166534,
+            #15803d
+        );
+
+        border-radius: 25px;
+
+        padding: 30px;
+
+        color: white;
+
+        margin-bottom: 25px;
+
+        box-shadow:
+            0 10px 30px rgba(22, 101, 52, 0.18);
+    }
+
+    .dashboard-header h1 {
+        color: white;
+
+        font-size: 36px;
+
+        margin: 0 0 8px 0;
+    }
+
+    .dashboard-header p {
+        color: #dcfce7;
+
+        font-size: 16px;
+
+        margin: 0;
+    }
+
+
+    /* =========================================
+       STAT CARDS
+       ========================================= */
+
+    .stat-card {
+        background: #fffdf7;
+
+        border: 2px solid #fde68a;
+
+        border-radius: 20px;
+
+        padding: 20px;
+
+        text-align: center;
+
+        min-height: 120px;
+
+        box-shadow:
+            0 6px 18px rgba(245, 158, 11, 0.07);
+    }
+
+    .stat-icon {
+        font-size: 30px;
+    }
+
+    .stat-value {
+        color: #166534;
+
+        font-size: 25px;
+
+        font-weight: 800;
+
+        margin-top: 5px;
+    }
+
+    .stat-label {
+        color: #78716c;
+
+        font-size: 14px;
+    }
+
+
+    /* =========================================
+       PROFILE CARD
+       ========================================= */
+
+    .profile-card {
+        background: white;
+
+        border: 2px solid #dcfce7;
+
+        border-radius: 20px;
+
+        padding: 22px;
+
+        box-shadow:
+            0 6px 20px rgba(22, 101, 52, 0.06);
+    }
+
+
+    /* =========================================
+       MEAL CARD
+       ========================================= */
+
+    .user-meal-card {
+        background: white;
+
+        border: 2px solid #dcfce7;
+
+        border-radius: 22px;
+
+        padding: 22px;
+
+        min-height: 245px;
+
+        box-shadow:
+            0 8px 25px rgba(22, 101, 52, 0.07);
+
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+    .user-meal-card:hover {
+        transform: translateY(-6px);
+
+        box-shadow:
+            0 15px 35px rgba(22, 101, 52, 0.13);
+    }
+
+    .meal-emoji {
+        font-size: 45px;
+    }
+
+    .user-meal-card h3 {
+        color: #166534;
+
+        font-size: 21px;
+
+        margin: 7px 0 12px 0;
+    }
+
+    .meal-info {
+        color: #57534e;
+
+        font-size: 14px;
+
+        margin: 7px 0;
+    }
+
+    .meal-price {
+        color: #166534;
+
+        font-size: 23px;
+
+        font-weight: 800;
+    }
+
+    .rating-badge {
+        display: inline-block;
+
+        background: #fef3c7;
+
+        color: #92400e;
+
+        padding: 5px 10px;
+
+        border-radius: 20px;
+
+        font-weight: 700;
+
+        font-size: 13px;
+    }
+
+    .availability-badge {
+        display: inline-block;
+
+        background: #dcfce7;
+
+        color: #166534;
+
+        padding: 5px 10px;
+
+        border-radius: 20px;
+
+        font-weight: 600;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================
+       ORDER CARD
+       ========================================= */
+
+    .order-card {
+        background: white;
+
+        border: 2px solid #e7e5e4;
+
+        border-radius: 20px;
+
+        padding: 20px;
+
+        margin-bottom: 15px;
+
+        box-shadow:
+            0 5px 18px rgba(0, 0, 0, 0.04);
+    }
+
+    .order-title {
+        color: #166534;
+
+        font-size: 20px;
+
+        font-weight: 800;
+    }
+
+    .order-info {
+        color: #57534e;
+
+        margin: 5px 0;
+    }
+
+    .status-placed {
+        color: #92400e;
+
+        background: #fef3c7;
+
+        padding: 6px 12px;
+
+        border-radius: 20px;
+
+        font-weight: 700;
+
+        display: inline-block;
+    }
+
+    .status-accepted {
+        color: #1d4ed8;
+
+        background: #dbeafe;
+
+        padding: 6px 12px;
+
+        border-radius: 20px;
+
+        font-weight: 700;
+
+        display: inline-block;
+    }
+
+    .status-completed {
+        color: #166534;
+
+        background: #dcfce7;
+
+        padding: 6px 12px;
+
+        border-radius: 20px;
+
+        font-weight: 700;
+
+        display: inline-block;
+    }
+
+    /* =========================================
+       EMPTY STATE
+       ========================================= */
+
+    .empty-state {
+        text-align: center;
+
+        background: #fffbeb;
+
+        border: 2px dashed #fde68a;
+
+        border-radius: 22px;
+
+        padding: 35px;
+
+        color: #78716c;
+    }
+
+    .empty-icon {
+        font-size: 50px;
+    }
 
 # =========================================================
 # HOME PAGE
@@ -1142,27 +1429,62 @@ def home_page():
 
 def User_dashboard():
 
-    st.title("👤 User Dashboard")
+    # =========================================
+    # HEADER
+    # =========================================
 
-    st.write(
-        "Welcome to HomeMeal! Discover fresh, affordable "
-        "and delicious home-cooked meals near you."
+    st.html(
+        """
+        <div class="dashboard-header">
+
+            <h1>
+                🍱 Welcome to HomeMeal
+            </h1>
+
+            <p>
+                Discover fresh, affordable and
+                delicious home-cooked meals.
+            </p>
+
+        </div>
+        """
     )
+
+
+    # =========================================
+    # BACK BUTTON
+    # =========================================
 
     if st.button("⬅️ Back to Home"):
 
         go_to("home")
+
         st.rerun()
+
 
     st.divider()
 
-    # =====================================================
-    # USER PROFILE
-    # =====================================================
 
-    st.subheader("👤 Your Profile")
+    # =========================================
+    # USER PROFILE
+    # =========================================
+
+    st.markdown(
+        """
+        <div class="section-title">
+            👤 Your Profile
+        </div>
+
+        <div class="section-subtitle">
+            Tell us what you're looking for.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 
     col1, col2 = st.columns(2)
+
 
     with col1:
 
@@ -1171,6 +1493,7 @@ def User_dashboard():
             placeholder="Enter your name",
             key="user_name"
         )
+
 
     with col2:
 
@@ -1181,13 +1504,19 @@ def User_dashboard():
                 "₹50 - ₹100",
                 "₹100 - ₹150",
                 "Above ₹150"
-            ]
+            ],
+            key="user_budget"
         )
 
-    # Save user profile
+
+    # =========================================
+    # SAVE USER
+    # =========================================
+
     if user_name.strip():
 
         existing_user = None
+
 
         for user in database["users"]:
 
@@ -1197,7 +1526,9 @@ def User_dashboard():
             ):
 
                 existing_user = user
+
                 break
+
 
         if existing_user:
 
@@ -1212,66 +1543,299 @@ def User_dashboard():
                 }
             )
 
+
         save_database(database)
+
 
     st.divider()
 
-    # =====================================================
-    # AVAILABLE MEALS
-    # =====================================================
 
-    st.subheader("🍱 Available Home-Cooked Meals")
+    # =========================================
+    # DASHBOARD STATS
+    # =========================================
+
+    current_user = (
+        user_name.strip()
+        if user_name.strip()
+        else "User"
+    )
+
+
+    my_orders = [
+
+        order
+
+        for order in st.session_state.orders
+
+        if order.get("customer", "") == current_user
+
+    ]
+
+
+    completed_orders = sum(
+        1
+        for order in my_orders
+        if order.get("status") == "Completed"
+    )
+
+
+    active_orders = sum(
+        1
+        for order in my_orders
+        if order.get("status") in [
+            "Placed",
+            "Accepted"
+        ]
+    )
+
+
+    col1, col2, col3 = st.columns(3)
+
+
+    with col1:
+
+        st.html(
+            f"""
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📦
+                </div>
+
+                <div class="stat-value">
+                    {len(my_orders)}
+                </div>
+
+                <div class="stat-label">
+                    Total Orders
+                </div>
+
+            </div>
+            """
+        )
+
+
+    with col2:
+
+        st.html(
+            f"""
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🔄
+                </div>
+
+                <div class="stat-value">
+                    {active_orders}
+                </div>
+
+                <div class="stat-label">
+                    Active Orders
+                </div>
+
+            </div>
+            """
+        )
+
+
+    with col3:
+
+        st.html(
+            f"""
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div class="stat-value">
+                    {completed_orders}
+                </div>
+
+                <div class="stat-label">
+                    Completed
+                </div>
+
+            </div>
+            """
+        )
+
+
+    st.divider()
+
+
+    # =========================================
+    # FIND MEALS
+    # =========================================
+
+    st.markdown(
+        """
+        <div class="section-title">
+            🍱 Find Your Meal
+        </div>
+
+        <div class="section-subtitle">
+            Homemade food from cooks around you.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 
     search = st.text_input(
-        "🔎 Search meals or cooks",
-        placeholder="Example: Rajma, Thali, Priya..."
+        "🔎 Search",
+        placeholder="Search for Rajma, Thali, Pasta, Cook name..."
     )
+
+
+    # =========================================
+    # BUDGET FILTER
+    # =========================================
+
+    budget_filter = st.selectbox(
+        "💰 Filter by Budget",
+        [
+            "All Meals",
+            "Under ₹50",
+            "₹50 - ₹100",
+            "₹100 - ₹150",
+            "Above ₹150"
+        ]
+    )
+
 
     available_meals = []
 
+
     for meal in st.session_state.meals:
 
-        quantity = meal.get("quantity", 0)
+        quantity = meal.get(
+            "quantity",
+            0
+        )
 
-        if quantity > 0:
 
-            meal_name = meal.get("name", "")
-            cook_name = meal.get("cook", "")
+        if quantity <= 0:
+
+            continue
+
+
+        meal_name = meal.get(
+            "name",
+            ""
+        )
+
+
+        cook_name = meal.get(
+            "cook",
+            ""
+        )
+
+
+        price = meal.get(
+            "price",
+            0
+        )
+
+
+        # Search filter
+
+        if search:
+
+            search_lower = search.lower()
+
 
             if (
-                not search
-                or search.lower() in meal_name.lower()
-                or search.lower() in cook_name.lower()
+                search_lower not in meal_name.lower()
+                and
+                search_lower not in cook_name.lower()
             ):
 
-                available_meals.append(meal)
+                continue
+
+
+        # Budget filter
+
+        if budget_filter == "Under ₹50":
+
+            if price >= 50:
+                continue
+
+
+        elif budget_filter == "₹50 - ₹100":
+
+            if price < 50 or price > 100:
+                continue
+
+
+        elif budget_filter == "₹100 - ₹150":
+
+            if price < 100 or price > 150:
+                continue
+
+
+        elif budget_filter == "Above ₹150":
+
+            if price <= 150:
+                continue
+
+
+        available_meals.append(meal)
+
+
+    # =========================================
+    # DISPLAY MEALS
+    # =========================================
 
     if not available_meals:
 
-        st.warning(
-            "No meals found. Try another search."
+        st.html(
+            """
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    🔎
+                </div>
+
+                <h3>
+                    No meals found
+                </h3>
+
+                <p>
+                    Try another search or budget range.
+                </p>
+
+            </div>
+            """
         )
+
 
     else:
 
         columns = st.columns(3)
 
-        for index, meal in enumerate(available_meals):
+
+        for index, meal in enumerate(
+            available_meals
+        ):
 
             with columns[index % 3]:
 
-                # =================================================
+                # =================================
                 # FIND COOK RATING
-                # =================================================
+                # =================================
 
                 cook_rating = 5.0
+
                 cook_rating_count = 0
+
 
                 for cook in database["cooks"]:
 
                     if (
                         cook.get("name", "").lower()
-                        == meal.get("cook", "").lower()
+                        ==
+                        meal.get("cook", "").lower()
                     ):
 
                         cook_rating = cook.get(
@@ -1286,40 +1850,69 @@ def User_dashboard():
 
                         break
 
+
+                # =================================
+                # MEAL CARD
+                # =================================
+
                 st.html(
                     f"""
-                    <div class="meal-card">
+                    <div class="user-meal-card">
 
-                        <h3>🍱 {meal.get("name", "Meal")}</h3>
+                        <div class="meal-emoji">
+                            🍱
+                        </div>
 
-                        <p>
-                            👨‍🍳 <b>Cook:</b>
+                        <h3>
+                            {meal.get("name", "Meal")}
+                        </h3>
+
+                        <div class="meal-info">
+                            👩‍🍳
+                            <b>Cook:</b>
                             {meal.get("cook", "Unknown")}
-                        </p>
+                        </div>
 
-                        <p>
-                            ⭐ <b>Rating:</b>
-                            {cook_rating}/5
-                            ({cook_rating_count} ratings)
-                        </p>
+                        <div class="meal-info">
 
-                        <p>
-                            💰 <b>Price:</b>
+                            <span class="rating-badge">
+                                ⭐ {cook_rating}/5
+                            </span>
+
+                            &nbsp;
+
+                            <small>
+                                {cook_rating_count} ratings
+                            </small>
+
+                        </div>
+
+                        <div class="meal-info">
+
+                            <span class="availability-badge">
+                                📦
+                                {meal.get("quantity", 0)}
+                                available
+                            </span>
+
+                        </div>
+
+                        <div class="meal-price">
                             ₹{meal.get("price", 0)}
-                        </p>
-
-                        <p>
-                            📦 <b>Available:</b>
-                            {meal.get("quantity", 0)}
-                        </p>
+                        </div>
 
                     </div>
                     """
                 )
 
+
+                # =================================
+                # ORDER BUTTON
+                # =================================
+
                 if st.button(
-                    f"🛒 Order {meal['name']}",
-                    key=f"order_{meal['id']}",
+                    f"🛒 Order {meal.get('name', 'Meal')}",
+                    key=f"order_{meal.get('id')}",
                     use_container_width=True
                 ):
 
@@ -1329,43 +1922,373 @@ def User_dashboard():
                         else "User"
                     )
 
+
                     new_order = {
-                        "id": st.session_state.next_order_id,
-                        "meal": meal["name"],
-                        "cook": meal["cook"],
-                        "customer": customer,
-                        "price": meal["price"],
-                        "status": "Placed",
-                        "rating": None
+
+                        "id":
+                            st.session_state.next_order_id,
+
+                        "meal":
+                            meal.get(
+                                "name",
+                                "Meal"
+                            ),
+
+                        "cook":
+                            meal.get(
+                                "cook",
+                                "Unknown"
+                            ),
+
+                        "customer":
+                            customer,
+
+                        "price":
+                            meal.get(
+                                "price",
+                                0
+                            ),
+
+                        "status":
+                            "Placed",
+
+                        "rating":
+                            None
                     }
+
+
+                    # Add order
 
                     st.session_state.orders.append(
                         new_order
                     )
 
-                    # Reduce meal quantity
-                    for saved_meal in st.session_state.meals:
 
-                        if saved_meal["id"] == meal["id"]:
+                    # Reduce quantity
+
+                    for saved_meal in (
+                        st.session_state.meals
+                    ):
+
+                        if (
+                            saved_meal.get("id")
+                            ==
+                            meal.get("id")
+                        ):
 
                             saved_meal["quantity"] -= 1
+
                             break
 
-                    database["orders"] = st.session_state.orders
-                    database["meals"] = st.session_state.meals
 
-                    save_database(database)
+                    # Save
+
+                    database["orders"] = (
+                        st.session_state.orders
+                    )
+
+                    database["meals"] = (
+                        st.session_state.meals
+                    )
+
+
+                    save_database(
+                        database
+                    )
+
 
                     st.session_state.next_order_id += 1
 
+
                     st.success(
-                        f"✅ Order placed for {meal['name']}!"
+                        f"✅ Order placed for "
+                        f"{meal.get('name', 'Meal')}!"
                     )
+
 
                     st.rerun()
 
+
     st.divider()
 
+
+    # =========================================
+    # MY ORDERS
+    # =========================================
+
+    st.markdown(
+        """
+        <div class="section-title">
+            📦 My Orders
+        </div>
+
+        <div class="section-subtitle">
+            Track your meals and manage your orders.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    if not my_orders:
+
+        st.html(
+            """
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    🍱
+                </div>
+
+                <h3>
+                    No orders yet
+                </h3>
+
+                <p>
+                    Find your first homemade meal above!
+                </p>
+
+            </div>
+            """
+        )
+
+
+    else:
+
+        for order in reversed(my_orders):
+
+            order_id = order.get(
+                "id",
+                0
+            )
+
+            status = order.get(
+                "status",
+                "Placed"
+            )
+
+
+            # =================================
+            # STATUS CLASS
+            # =================================
+
+            if status == "Accepted":
+
+                status_html = (
+                    '<span class="status-accepted">'
+                    '🔵 Accepted'
+                    '</span>'
+                )
+
+
+            elif status == "Completed":
+
+                status_html = (
+                    '<span class="status-completed">'
+                    '🟢 Completed'
+                    '</span>'
+                )
+
+
+            else:
+
+                status_html = (
+                    '<span class="status-placed">'
+                    '🟡 Placed'
+                    '</span>'
+                )
+
+
+            # =================================
+            # ORDER CARD
+            # =================================
+
+            st.html(
+                f"""
+                <div class="order-card">
+
+                    <div class="order-title">
+                        🧾 Order #{order_id:03d}
+                    </div>
+
+                    <div class="order-info">
+                        🍱
+                        <b>Meal:</b>
+                        {order.get("meal", "Unknown")}
+                    </div>
+
+                    <div class="order-info">
+                        👩‍🍳
+                        <b>Cook:</b>
+                        {order.get("cook", "Unknown")}
+                    </div>
+
+                    <div class="order-info">
+                        💰
+                        <b>Price:</b>
+                        ₹{order.get("price", 0)}
+                    </div>
+
+                    <div class="order-info">
+                        📍
+                        <b>Status:</b>
+                        {status_html}
+                    </div>
+
+                </div>
+                """
+            )
+
+
+            # =================================
+            # RATING
+            # =================================
+
+            if status == "Completed":
+
+                if order.get("rating") is None:
+
+                    st.markdown(
+                        "### ⭐ Rate Your Cook"
+                    )
+
+
+                    rating = st.radio(
+                        "How was your experience?",
+                        [1, 2, 3, 4, 5],
+
+                        format_func=lambda x:
+                            "⭐" * x,
+
+                        horizontal=True,
+
+                        key=f"rating_{order_id}"
+                    )
+
+
+                    if st.button(
+                        "⭐ Submit Rating",
+                        key=f"submit_rating_{order_id}",
+                        use_container_width=True
+                    ):
+
+                        # Save rating to order
+
+                        for saved_order in (
+                            st.session_state.orders
+                        ):
+
+                            if (
+                                saved_order.get("id")
+                                ==
+                                order_id
+                            ):
+
+                                saved_order["rating"] = rating
+
+                                break
+
+
+                        # Find cook
+
+                        cook_found = False
+
+
+                        for cook in database["cooks"]:
+
+                            if (
+                                cook.get("name", "").lower()
+                                ==
+                                order.get(
+                                    "cook",
+                                    ""
+                                ).lower()
+                            ):
+
+                                if "ratings" not in cook:
+
+                                    cook["ratings"] = []
+
+
+                                cook["ratings"].append(
+                                    rating
+                                )
+
+
+                                cook["rating_count"] = len(
+                                    cook["ratings"]
+                                )
+
+
+                                cook["rating"] = round(
+                                    sum(
+                                        cook["ratings"]
+                                    )
+                                    /
+                                    len(
+                                        cook["ratings"]
+                                    ),
+                                    1
+                                )
+
+
+                                cook_found = True
+
+                                break
+
+
+                        # Create cook if missing
+
+                        if not cook_found:
+
+                            database["cooks"].append(
+                                {
+                                    "name":
+                                        order.get(
+                                            "cook",
+                                            "Unknown Cook"
+                                        ),
+
+                                    "location":
+                                        "",
+
+                                    "ratings":
+                                        [rating],
+
+                                    "rating":
+                                        float(rating),
+
+                                    "rating_count":
+                                        1
+                                }
+                            )
+
+
+                        database["orders"] = (
+                            st.session_state.orders
+                        )
+
+
+                        save_database(
+                            database
+                        )
+
+
+                        st.success(
+                            "⭐ Thank you! "
+                            "Your rating has been submitted."
+                        )
+
+
+                        st.rerun()
+
+
+                else:
+
+                    st.success(
+                        f"⭐ You rated this cook "
+                        f"{order.get('rating')}/5"
+                    )
     # =====================================================
     # MY ORDERS
     # =====================================================
