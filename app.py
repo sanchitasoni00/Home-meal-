@@ -31,7 +31,6 @@ def load_database():
         "orders": []
     }
 
-    # Create database if it does not exist
     if not os.path.exists(DATABASE_FILE):
         with open(DATABASE_FILE, "w", encoding="utf-8") as file:
             json.dump(
@@ -43,7 +42,6 @@ def load_database():
 
         return default_database
 
-    # Try reading existing database
     try:
         with open(DATABASE_FILE, "r", encoding="utf-8") as file:
             database = json.load(file)
@@ -61,7 +59,6 @@ def load_database():
 
         return database
 
-    # Make sure all required keys exist
     database.setdefault("users", [])
     database.setdefault("cooks", [])
     database.setdefault("meals", [])
@@ -256,7 +253,7 @@ database["orders"] = st.session_state.orders
 
 save_database(database)
 
-z
+
 # =========================================================
 # NAVIGATION
 # =========================================================
@@ -501,28 +498,38 @@ def home_page():
 
             go_to("cook")
             st.rerun()
-            
-            st.divider()
-             st.markdown(
+
+    # =====================================================
+    # WHY HOME MEAL
+    # =====================================================
+
+    st.divider()
+
+    st.markdown(
         """
-        <h2 style="
+        <div style="
             text-align:center;
-            color:#166534;
-            margin-bottom:10px;
-
- 
+            padding:25px 10px 20px 10px;
         ">
-            💚 Why HomeMeal?
-        </h2>
 
-        <p style="
-            text-align:center;
-            color:#6b7280;
-            font-size:17px;
-            margin-bottom:30px;
-        ">
-            Making everyday meals better, easier and more affordable.
-        </p>
+            <h1 style="
+                color:#166534;
+                font-size:40px;
+                font-weight:800;
+                margin-bottom:8px;
+            ">
+                💚 Why HomeMeal?
+            </h1>
+
+            <p style="
+                color:#6b7280;
+                font-size:18px;
+                margin-top:0;
+            ">
+                More than just a meal — it's the taste of home.
+            </p>
+
+        </div>
         """,
         unsafe_allow_html=True
     )
@@ -951,7 +958,7 @@ def User_dashboard():
                                     cook_found = True
                                     break
 
-                            # If cook does not exist, create one
+                            # Create cook if not found
                             if not cook_found:
 
                                 database["cooks"].append(
