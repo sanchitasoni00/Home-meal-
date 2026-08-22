@@ -501,6 +501,105 @@ def home_page():
 
             go_to("cook")
             st.rerun()
+            st.markdown(
+        """
+        <h2 style="
+            text-align:center;
+            color:#166534;
+            margin-bottom:10px;
+        ">
+            💚 Why HomeMeal?
+        </h2>
+
+        <p style="
+            text-align:center;
+            color:#6b7280;
+            font-size:17px;
+            margin-bottom:30px;
+        ">
+            Making everyday meals better, easier and more affordable.
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
+
+    why1, why2, why3, why4 = st.columns(4)
+
+    with why1:
+
+        st.html(
+            """
+            <div class="feature-card">
+
+                <div class="feature-icon">🏠</div>
+
+                <h3>Home-Cooked</h3>
+
+                <p>
+                    Enjoy fresh meals prepared with the
+                    comfort and care of home cooking.
+                </p>
+
+            </div>
+            """
+        )
+
+    with why2:
+
+        st.html(
+            """
+            <div class="feature-card">
+
+                <div class="feature-icon">💰</div>
+
+                <h3>Student-Friendly</h3>
+
+                <p>
+                    Affordable meal options designed
+                    for students and budget-conscious users.
+                </p>
+
+            </div>
+            """
+        )
+
+    with why3:
+
+        st.html(
+            """
+            <div class="feature-card">
+
+                <div class="feature-icon">👩‍🍳</div>
+
+                <h3>Support Local Cooks</h3>
+
+                <p>
+                    Help talented home cooks earn by
+                    sharing their delicious meals.
+                </p>
+
+            </div>
+            """
+        )
+
+    with why4:
+
+        st.html(
+            """
+            <div class="feature-card">
+
+                <div class="feature-icon">❤️</div>
+
+                <h3>Simple & Trusted</h3>
+
+                <p>
+                    Discover, order and enjoy meals
+                    through a simple and convenient platform.
+                </p>
+
+            </div>
+            """
+        )
 
 
 # =========================================================
