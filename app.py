@@ -423,7 +423,7 @@ search = st.text_input(
 
 available_meals = []
 
-    for meal in st.session_state.meals:
+for meal in st.session_state.meals:
 
         if meal["quantity"] > 0:
 
