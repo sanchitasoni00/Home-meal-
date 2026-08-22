@@ -265,233 +265,362 @@ def go_to(page):
 # =========================================================
 # CUSTOM CSS
 # =========================================================
+
 st.html(
     """
     <style>
 
-    /* ==============================
-       GLOBAL
-    ============================== */
+    /* =========================================
+       MAIN PAGE
+       ========================================= */
 
     .block-container {
-        padding-top: 2rem;
-        padding-bottom: 3rem;
         max-width: 1200px;
+        padding-top: 2rem;
+        padding-bottom: 4rem;
     }
 
-    /* ==============================
-       HERO
-    ============================== */
+
+    /* =========================================
+       HERO SECTION
+       ========================================= */
 
     .hero {
         text-align: center;
-        padding: 55px 20px 45px 20px;
+
+        padding: 55px 30px 45px 30px;
+
         border-radius: 30px;
+
         background:
             linear-gradient(
                 135deg,
-                #f0fdf4,
-                #dcfce7,
-                #f7fee7
+                #fffbeb 0%,
+                #f0fdf4 55%,
+                #ecfccb 100%
             );
-        border: 1px solid #bbf7d0;
-        margin-bottom: 30px;
+
+        border: 2px solid #bbf7d0;
+
+        box-shadow:
+            0 12px 35px rgba(22, 101, 52, 0.10);
+
+        margin-bottom: 35px;
     }
 
+
     .hero-icon {
-        font-size: 72px;
-        margin-bottom: 10px;
+        font-size: 75px;
+        margin-bottom: 5px;
     }
+
 
     .hero-title {
         font-size: 52px;
         font-weight: 900;
-        margin: 5px 0 12px 0;
 
-        background: linear-gradient(
-            90deg,
-            #166534,
-            #22c55e,
-            #15803d
-        );
+        margin: 5px 0 10px 0;
+
+        background:
+            linear-gradient(
+                90deg,
+                #166534,
+                #22c55e,
+                #15803d
+            );
 
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
+
     .hero-tagline {
         font-size: 23px;
         font-weight: 700;
+
         color: #166534;
+
         margin-bottom: 12px;
     }
 
+
     .hero-description {
-        font-size: 17px;
-        color: #4b5563;
         max-width: 760px;
+
         margin: auto;
+
+        color: #57534e;
+
+        font-size: 17px;
+
         line-height: 1.7;
     }
 
-    /* ==============================
-       BADGES
-    ============================== */
+
+    /* =========================================
+       HERO BADGES
+       ========================================= */
 
     .hero-badges {
         display: flex;
+
         justify-content: center;
+
+        align-items: center;
+
         gap: 12px;
+
         flex-wrap: wrap;
+
         margin-top: 25px;
     }
 
+
     .badge {
         background: white;
+
         color: #166534;
-        padding: 9px 16px;
-        border-radius: 30px;
+
         border: 1px solid #bbf7d0;
-        font-weight: 600;
+
+        border-radius: 30px;
+
+        padding: 9px 17px;
+
         font-size: 14px;
+
+        font-weight: 700;
+
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.04);
     }
 
-    /* ==============================
-       FEATURE CARDS
-    ============================== */
 
-    .feature-card {
-        background: linear-gradient(
-            145deg,
-            #f0fdf4,
-            #dcfce7
-        );
+    /* =========================================
+       SECTION HEADINGS
+       ========================================= */
 
-        padding: 28px 22px;
-        border-radius: 22px;
+    .section-title {
         text-align: center;
 
-        border: 2px solid #bbf7d0;
+        color: #166534;
+
+        font-size: 36px;
+
+        font-weight: 850;
+
+        margin-top: 30px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .section-subtitle {
+        text-align: center;
+
+        color: #78716c;
+
+        font-size: 17px;
+
+        margin-bottom: 30px;
+    }
+
+
+    /* =========================================
+       FEATURE CARDS
+       ========================================= */
+
+    .feature-card {
+        background: white;
+
+        border-radius: 22px;
+
+        padding: 28px 22px;
+
+        text-align: center;
 
         min-height: 190px;
 
+        border: 2px solid #dcfce7;
+
         box-shadow:
-            0 8px 25px rgba(22, 101, 52, 0.08);
+            0 8px 25px rgba(22, 101, 52, 0.07);
 
         transition:
             transform 0.25s ease,
-            box-shadow 0.25s ease;
+            box-shadow 0.25s ease,
+            border-color 0.25s ease;
     }
+
 
     .feature-card:hover {
         transform: translateY(-7px);
 
+        border-color: #86efac;
+
         box-shadow:
-            0 15px 35px rgba(22, 101, 52, 0.16);
+            0 15px 35px rgba(22, 101, 52, 0.14);
     }
+
+
+    .feature-icon {
+        font-size: 46px;
+
+        margin-bottom: 5px;
+    }
+
 
     .feature-card h3 {
-        color: #14532d !important;
+        color: #166534 !important;
+
         font-size: 22px;
-        margin-top: 12px;
-        margin-bottom: 10px;
+
+        margin: 8px 0 10px 0;
     }
 
+
     .feature-card p {
-        color: #166534 !important;
+        color: #57534e !important;
+
         font-size: 15px;
+
         line-height: 1.6;
     }
 
-    .feature-icon {
-        font-size: 45px;
-    }
 
-    /* ==============================
-       SECTION HEADINGS
-    ============================== */
-
-    .section-title {
-        text-align: center;
-        color: #166534;
-        font-size: 38px;
-        font-weight: 800;
-        margin-top: 25px;
-        margin-bottom: 8px;
-    }
-
-    .section-subtitle {
-        text-align: center;
-        color: #6b7280;
-        font-size: 17px;
-        margin-bottom: 30px;
-    }
-
-    /* ==============================
+    /* =========================================
        HOW IT WORKS
-    ============================== */
+       ========================================= */
 
     .step-card {
+        background: #fffdf7;
+
+        border: 2px solid #fde68a;
+
+        border-radius: 22px;
+
+        padding: 25px 18px;
+
         text-align: center;
-        padding: 25px 15px;
-        background: white;
-        border-radius: 20px;
-        border: 2px solid #dcfce7;
+
         min-height: 175px;
 
         box-shadow:
-            0 5px 18px rgba(0,0,0,0.05);
+            0 7px 20px rgba(245, 158, 11, 0.08);
+
+        transition:
+            transform 0.25s ease;
     }
 
+
+    .step-card:hover {
+        transform: translateY(-6px);
+    }
+
+
     .step-number {
-        display: inline-flex;
+        width: 46px;
+        height: 46px;
+
+        margin: auto;
+
+        display: flex;
+
         align-items: center;
         justify-content: center;
 
-        width: 45px;
-        height: 45px;
-
         border-radius: 50%;
 
-        background: #166534;
+        background: #f59e0b;
+
         color: white;
 
-        font-weight: 800;
         font-size: 18px;
 
-        margin-bottom: 10px;
+        font-weight: 800;
     }
+
 
     .step-card h3 {
-        color: #14532d;
+        color: #166534;
+
         font-size: 20px;
-        margin: 8px 0;
+
+        margin: 12px 0 8px 0;
     }
 
+
     .step-card p {
-        color: #6b7280;
+        color: #57534e;
+
         font-size: 14px;
+
         line-height: 1.5;
     }
 
-    /* ==============================
+
+    /* =========================================
+       TRUST BANNER
+       ========================================= */
+
+    .trust-banner {
+        text-align: center;
+
+        padding: 30px;
+
+        border-radius: 25px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #166534,
+                #15803d
+            );
+
+        color: white;
+
+        margin-top: 35px;
+
+        box-shadow:
+            0 12px 30px rgba(22, 101, 52, 0.18);
+    }
+
+
+    .trust-banner h2 {
+        color: white;
+
+        font-size: 26px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .trust-banner p {
+        color: #dcfce7;
+
+        font-size: 16px;
+
+        margin: 0;
+    }
+
+
+    /* =========================================
        MEAL CARDS
-    ============================== */
+       ========================================= */
 
     .meal-card {
-        background: linear-gradient(
-            145deg,
-            #f0fdf4,
-            #ffffff
-        );
+        background:
+            linear-gradient(
+                145deg,
+                #ffffff,
+                #f0fdf4
+            );
 
         border: 2px solid #bbf7d0;
 
         border-radius: 20px;
 
         padding: 22px;
-
-        margin-bottom: 12px;
 
         min-height: 220px;
 
@@ -503,6 +632,7 @@ st.html(
             box-shadow 0.25s ease;
     }
 
+
     .meal-card:hover {
         transform: translateY(-5px);
 
@@ -510,55 +640,24 @@ st.html(
             0 14px 30px rgba(22, 101, 52, 0.13);
     }
 
+
     .meal-card h3 {
         color: #166534;
+
         margin-bottom: 12px;
     }
 
+
     .meal-card p {
-        color: #374151;
+        color: #44403c;
+
         margin: 7px 0;
     }
 
-    /* ==============================
-       TRUST BANNER
-    ============================== */
-
-    .trust-banner {
-        text-align: center;
-        background: linear-gradient(
-            90deg,
-            #166534,
-            #15803d
-        );
-
-        color: white;
-
-        padding: 28px;
-
-        border-radius: 22px;
-
-        margin-top: 30px;
-        margin-bottom: 30px;
-
-        box-shadow:
-            0 10px 25px rgba(22, 101, 52, 0.18);
-    }
-
-    .trust-banner h2 {
-        color: white;
-        margin-bottom: 8px;
-    }
-
-    .trust-banner p {
-        color: #dcfce7;
-        margin: 0;
-    }
 
     </style>
     """
 )
-
 
 # =========================================================
 # HOME PAGE
@@ -566,9 +665,9 @@ st.html(
 
 def home_page():
 
-    # =====================================================
-    # HERO SECTION
-    # =====================================================
+    # =========================================
+    # HERO
+    # =========================================
 
     st.html(
         """
@@ -587,9 +686,10 @@ def home_page():
             </div>
 
             <div class="hero-description">
-                Discover delicious homemade meals from trusted
-                local cooks, made with care and designed to fit
-                your budget.
+                Discover delicious homemade meals from
+                trusted local cooks — made with care,
+                delivered with convenience and designed
+                to fit your budget.
             </div>
 
             <div class="hero-badges">
@@ -603,11 +703,11 @@ def home_page():
                 </div>
 
                 <div class="badge">
-                    ❤️ Trusted
+                    🌱 Fresh
                 </div>
 
                 <div class="badge">
-                    🌱 Fresh
+                    ⭐ Trusted
                 </div>
 
             </div>
@@ -616,14 +716,15 @@ def home_page():
         """
     )
 
-    # =====================================================
-    # FEATURES
-    # =====================================================
+
+    # =========================================
+    # WHAT MAKES HOME MEAL SPECIAL
+    # =========================================
 
     st.markdown(
         """
         <div class="section-title">
-            What Makes HomeMeal Special?
+            🍱 What Makes HomeMeal Special?
         </div>
 
         <div class="section-subtitle">
@@ -633,7 +734,9 @@ def home_page():
         unsafe_allow_html=True
     )
 
+
     col1, col2, col3 = st.columns(3)
+
 
     with col1:
 
@@ -641,18 +744,23 @@ def home_page():
             """
             <div class="feature-card">
 
-                <div class="feature-icon">💰</div>
+                <div class="feature-icon">
+                    💰
+                </div>
 
-                <h3>Affordable</h3>
+                <h3>
+                    Affordable
+                </h3>
 
                 <p>
-                    Delicious homemade meals that
-                    fit your everyday budget.
+                    Delicious homemade meals
+                    that fit your everyday budget.
                 </p>
 
             </div>
             """
         )
+
 
     with col2:
 
@@ -660,9 +768,13 @@ def home_page():
             """
             <div class="feature-card">
 
-                <div class="feature-icon">🏠</div>
+                <div class="feature-icon">
+                    🏠
+                </div>
 
-                <h3>Home-Cooked</h3>
+                <h3>
+                    Home-Cooked
+                </h3>
 
                 <p>
                     Fresh meals prepared by
@@ -673,30 +785,37 @@ def home_page():
             """
         )
 
+
     with col3:
 
         st.html(
             """
             <div class="feature-card">
 
-                <div class="feature-icon">❤️</div>
+                <div class="feature-icon">
+                    ❤️
+                </div>
 
-                <h3>Trusted</h3>
+                <h3>
+                    Trusted
+                </h3>
 
                 <p>
-                    Ratings and reviews help you
-                    choose cooks with confidence.
+                    Ratings and reviews help
+                    you choose with confidence.
                 </p>
 
             </div>
             """
         )
 
+
     st.divider()
 
-    # =====================================================
-    # CHOOSE ROLE
-    # =====================================================
+
+    # =========================================
+    # GET STARTED
+    # =========================================
 
     st.markdown(
         """
@@ -711,31 +830,39 @@ def home_page():
         unsafe_allow_html=True
     )
 
+
     user_type = st.radio(
         "I am:",
         ["User", "Home Cook"],
         horizontal=True
     )
 
+
     if user_type == "User":
 
         st.info(
-            "👤 Discover meals, compare cooks and place orders."
+            "👤 Discover meals, compare cooks and "
+            "place orders."
         )
 
+
         if st.button(
-            "👤 Open User Dashboard",
+            "🍱 Open User Dashboard",
             use_container_width=True
         ):
 
             go_to("User")
+
             st.rerun()
+
 
     else:
 
         st.info(
-            "👨‍🍳 Add your meals, manage orders and grow your business."
+            "👨‍🍳 Add your meals, manage orders and "
+            "grow your food business."
         )
+
 
         if st.button(
             "👨‍🍳 Open Cook Dashboard",
@@ -743,13 +870,16 @@ def home_page():
         ):
 
             go_to("cook")
+
             st.rerun()
 
-    # =====================================================
-    # WHY HOME MEAL
-    # =====================================================
 
     st.divider()
+
+
+    # =========================================
+    # WHY HOME MEAL
+    # =========================================
 
     st.markdown(
         """
@@ -764,7 +894,9 @@ def home_page():
         unsafe_allow_html=True
     )
 
+
     why1, why2, why3, why4 = st.columns(4)
+
 
     with why1:
 
@@ -772,18 +904,23 @@ def home_page():
             """
             <div class="feature-card">
 
-                <div class="feature-icon">🏠</div>
+                <div class="feature-icon">
+                    🏠
+                </div>
 
-                <h3>Home-Cooked</h3>
+                <h3>
+                    Taste of Home
+                </h3>
 
                 <p>
-                    Enjoy the comfort and care
-                    of freshly prepared food.
+                    Enjoy comforting meals
+                    prepared like home.
                 </p>
 
             </div>
             """
         )
+
 
     with why2:
 
@@ -791,18 +928,23 @@ def home_page():
             """
             <div class="feature-card">
 
-                <div class="feature-icon">💰</div>
+                <div class="feature-icon">
+                    💰
+                </div>
 
-                <h3>Student-Friendly</h3>
+                <h3>
+                    Budget Friendly
+                </h3>
 
                 <p>
-                    Affordable meals designed
-                    for everyday budgets.
+                    Affordable options for
+                    students and everyday users.
                 </p>
 
             </div>
             """
         )
+
 
     with why3:
 
@@ -810,18 +952,23 @@ def home_page():
             """
             <div class="feature-card">
 
-                <div class="feature-icon">👩‍🍳</div>
+                <div class="feature-icon">
+                    👩‍🍳
+                </div>
 
-                <h3>Support Local Cooks</h3>
+                <h3>
+                    Support Cooks
+                </h3>
 
                 <p>
-                    Help home cooks earn by
-                    sharing their delicious food.
+                    Help talented home cooks
+                    turn food into income.
                 </p>
 
             </div>
             """
         )
+
 
     with why4:
 
@@ -829,24 +976,30 @@ def home_page():
             """
             <div class="feature-card">
 
-                <div class="feature-icon">⭐</div>
+                <div class="feature-icon">
+                    ⭐
+                </div>
 
-                <h3>Trusted Choices</h3>
+                <h3>
+                    Trusted Choices
+                </h3>
 
                 <p>
-                    Ratings help users discover
-                    reliable cooks and meals.
+                    Ratings help you discover
+                    reliable cooks.
                 </p>
 
             </div>
             """
         )
 
-    # =====================================================
-    # HOW HOME MEAL WORKS
-    # =====================================================
 
     st.divider()
+
+
+    # =========================================
+    # HOW HOME MEAL WORKS
+    # =========================================
 
     st.markdown(
         """
@@ -861,7 +1014,9 @@ def home_page():
         unsafe_allow_html=True
     )
 
+
     step1, step2, step3, step4 = st.columns(4)
+
 
     with step1:
 
@@ -873,7 +1028,9 @@ def home_page():
                     1
                 </div>
 
-                <h3>🔎 Find</h3>
+                <h3>
+                    🔎 Find
+                </h3>
 
                 <p>
                     Explore homemade meals
@@ -883,6 +1040,7 @@ def home_page():
             </div>
             """
         )
+
 
     with step2:
 
@@ -894,16 +1052,19 @@ def home_page():
                     2
                 </div>
 
-                <h3>🛒 Order</h3>
+                <h3>
+                    🛒 Order
+                </h3>
 
                 <p>
                     Choose your meal and
-                    place an order.
+                    place your order.
                 </p>
 
             </div>
             """
         )
+
 
     with step3:
 
@@ -915,16 +1076,19 @@ def home_page():
                     3
                 </div>
 
-                <h3>👩‍🍳 Prepare</h3>
+                <h3>
+                    👩‍🍳 Prepare
+                </h3>
 
                 <p>
-                    Your local cook prepares
+                    Your home cook prepares
                     your fresh meal.
                 </p>
 
             </div>
             """
         )
+
 
     with step4:
 
@@ -936,20 +1100,23 @@ def home_page():
                     4
                 </div>
 
-                <h3>😋 Enjoy</h3>
+                <h3>
+                    😋 Enjoy
+                </h3>
 
                 <p>
-                    Enjoy your homemade meal
-                    and rate your experience.
+                    Enjoy your meal and
+                    share your rating.
                 </p>
 
             </div>
             """
         )
 
-    # =====================================================
-    # TRUST BANNER
-    # =====================================================
+
+    # =========================================
+    # FINAL BANNER
+    # =========================================
 
     st.html(
         """
