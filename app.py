@@ -421,7 +421,7 @@ search = st.text_input(
         placeholder="Example: Rajma, Thali, Priya..."
     )
 
-    available_meals = []
+available_meals = []
 
     for meal in st.session_state.meals:
 
