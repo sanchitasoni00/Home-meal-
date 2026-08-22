@@ -702,7 +702,7 @@ st.divider()
     # ADD MEAL
     # =====================================================
 
-    st.subheader("🍱 Add a Meal")
+st.subheader("🍱 Add a Meal")
 
     meal_name = st.text_input(
         "Meal Name",
@@ -769,7 +769,7 @@ with col2:
 
             st.rerun()
 
-    st.divider()
+st.divider()
 
     # =====================================================
     # MY ADDED MEALS
