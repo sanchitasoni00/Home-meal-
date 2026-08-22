@@ -119,7 +119,7 @@ if "meals" not in st.session_state:
                 "id": 2,
                 "name": "Veg Thali",
                 "cook": "Neha",
-                "rating": 4.7,
+                "rating": 3.7,
                 "price": 90,
                 "quantity": 6
             },
@@ -127,7 +127,7 @@ if "meals" not in st.session_state:
                 "id": 3,
                 "name": "Pasta",
                 "cook": "Anjali",
-                "rating": 4.6,
+                "rating": 3.9,
                 "price": 100,
                 "quantity": 4
             }
