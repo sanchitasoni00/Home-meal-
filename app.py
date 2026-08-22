@@ -523,7 +523,7 @@ current_user = (
         else "User"
     )
 
-    my_orders = []
+my_orders = []
 
     for order in st.session_state.orders:
 
