@@ -22,7 +22,7 @@ if not os.path.exists(DATABASE_FILE):
             return default_database
             try:
      with open(DATABASE_FILE, "r", encoding="utf-8") as file:
-        database = json.load(file)
+            database = json.load(file)
 except (json.JSONDecodeError, ValueError):
     database = default_database
     with open(DATABASE_FILE, "w" , encoding= "utf-8") as file:
