@@ -811,7 +811,7 @@ else:
                         f"📦 {meal['quantity']}"
                     )
 
-    st.divider()
+st.divider()
 
     # =====================================================
     # RECENT ORDERS
