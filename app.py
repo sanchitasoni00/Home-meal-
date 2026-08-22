@@ -632,7 +632,7 @@ for order in st.session_state.orders:
             == cook_name.strip().lower()
         ):
 
-            cook_orders.append(order)
+cook_orders.append(order)
 
     # =====================================================
     # MY MEALS
