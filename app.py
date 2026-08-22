@@ -416,7 +416,7 @@ st.divider()
 
 st.subheader("🍱 Available Home-Cooked Meals")
 
-    search = st.text_input(
+search = st.text_input(
         "🔎 Search meals or cooks",
         placeholder="Example: Rajma, Thali, Priya..."
     )
