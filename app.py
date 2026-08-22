@@ -870,15 +870,12 @@ else:
                                     == order["id"]
                                 ):
 
-                                    saved_order[
-                                        "status"
-                                    ] = "Accepted"
+                                    saved_order[ "status"] = "Accepted"
 
                                     break
-                          database["orders"] = st.session_state.orders
-                          save_database(database)
-
-                            st.success(
+                        database["orders"] = st.session_state.orders
+                        save_database(database)
+                        st.success(
                                 "Order accepted!"
                             )
 
