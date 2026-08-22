@@ -509,8 +509,7 @@ else:
                     )
 
                     st.rerun()
-
-    st.divider()
+st.divider()
 
     # =====================================================
     # MY ORDERS
