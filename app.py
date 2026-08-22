@@ -678,8 +678,8 @@ with col1:
             "🍱 Orders",
             total_orders
         )
- with col2:
-     st.metric(
+with col2:
+    st.metric(
             "💰 Earnings",
             f"₹{earnings}"
         )
@@ -690,13 +690,13 @@ with col3:
             total_meals
         )
 
-    with col4:
-        st.metric(
+with col4:
+    st.metric(
             "👥 Customers",
             customers
         )
 
-    st.divider()
+st.divider()
 
     # =====================================================
     # ADD MEAL
