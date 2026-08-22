@@ -408,7 +408,7 @@ for user in database ["users"]:
             }
         )
 save_database(database)
- st.divider()
+st.divider()
 
     # =====================================================
     # AVAILABLE MEALS
